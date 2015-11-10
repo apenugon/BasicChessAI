@@ -1,7 +1,22 @@
 CXX=g++
-CFLAGS=-O2
 OBJECTS=main.o
-DIR=$(pwd)
+DIR=$(shell pwd)
+OBJDIR=$(DIR)/obj
+SRCDIR=$(DIR)/src
+HEADERDIR=$(SRCDIR)/header
+CFLAGS=-O2 -std=c++11 -I$(HEADERDIR)
 
-main.o: $(DIR)/src/main.cpp
-	$(CXX) $(CFLAGS) -c main.cpp
+_DEPS=chess_board.h
+DEPS=$(patsubst %,$(HEADERDIR)/%,$(_DEPS))
+
+_OBJS=main.o chess_board.o
+OBJS=$(patsubst %,$(OBJDIR)/%, $(_OBJS))
+
+main: $(OBJS)
+	$(CXX) -o AIProject $(OBJS)
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPS)
+	$(CXX) $(CFLAGS) -c -o $@ $<
+
+clean: 
+	rm -f $(OBJDIR)/*

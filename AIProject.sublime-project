@@ -4,5 +4,18 @@
 		{
 			"path": "."
 		}
-	]
+	],
+	"build_systems":
+    [
+        {
+            "name": "Build and Run",
+            "shell_cmd": "make && ./AIProject",
+            "working_dir": "/home/akul/Documents/HKU/AI/Project"
+        },
+        {
+            "name": "Clean",
+            "shell_cmd": "make clean",
+            "working_dir": "/home/akul/Documents/HKU/AI/Project"
+        }
+    ]
 }
