@@ -5,47 +5,45 @@
  *----------------------------------------------------------
  */
 #include <vector>
+#include <map>
+#include <iostream>
 
-#define BOARD_LENGTH 12
+#include "piece.h"
+
+#define NUM_PIECES 7
 
 class ChessBoard {
 public:
-	int calculateScore();
- 	void placePiece();
- 	void printBoardState();
 
- 	enum Pieces {
-		EMPTY,
-		PAWN,
-		ROOK,
-		BISHOP,
-		KING,
-		QUEEN,
-		KNIGHT,
-	};
-
-	enum PlayerPieces {
-		BLACK_KNIGHT=6,
-		BLACK_QUEEN=5,
-		BLACK_KING=4,
-		BLACK_BISHOP=3,
-		BLACK_ROOK=2,
-		BLACK_PAWN=1,
-		NONE=0,
-		WHITE_PAWN=-1,
-		WHITE_ROOK=-2,
-		WHITE_BISHOP=-3,
-		WHITE_KING=-4,
-		WHITE_QUEEN=-5,
-		WHITE_KNIGHT=-6,
-	};
-
-private:
  	ChessBoard();
  	~ChessBoard();
+	int calculateScore();
+ 	void placePieces();
+ 	void printBoardState();
+
+ 	enum Col {
+ 		a=2,
+ 		b=3, 
+ 		c=4, 
+ 		d=5, 
+ 		e=6, 
+ 		f=7,
+ 		g=8, 
+ 		h=9,
+ 	};
+
+private:
  	// In our definition for the board, the actual 
  	// board is within the range 2-10. So we have an 8x8
  	// board.
- 	int board_state[12][12];
- 	std::vector<int> PieceList;
+ 	char colNumToChar[CHESS_PLAY_LENGTH] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+ 	std::map<char, int> colCharToNum;
+ 	char humanReadablePieces[NUM_PIECES] = {'_', 'P', 'R', 'B', 'K', 'Q', 'N'};
+
+ 	int board_state[BOARD_LENGTH][BOARD_LENGTH];
+ 	std::vector<Piece> PieceList;
+ 	std::map<char[2], std::vector<char[2]>> possibleMoves;
+
+ 	void initHumanReadablePieces();
+ 	void initColCharToNum();
 };

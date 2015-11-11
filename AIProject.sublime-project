@@ -8,6 +8,11 @@
 	"build_systems":
     [
         {
+            "name": "Build Debug and Run",
+            "shell_cmd": "make debug && ./AIProject",
+            "working_dir": "/home/akul/Documents/HKU/AI/Project"
+        },
+        {
             "name": "Build and Run",
             "shell_cmd": "make && ./AIProject",
             "working_dir": "/home/akul/Documents/HKU/AI/Project"
