@@ -34,13 +34,19 @@ public:
 	};
 
 
+	Piece(PlayerPiece player_piece, int row, int col, int** board_state);
 	Piece(PlayerPiece player_piece, int row, int col);
 	~Piece();
 	Piece::Types typeOf();
-	std::vector<std::pair<int,int>> possibleMoves();
+	void move(int row, int col, int** board_state);
+	std::vector<std::pair<int,int>> get_valid_moves();
+	std::pair<int,int> get_coords();
+	void generate_valid_moves(int** board_state);
 private:
+	std::vector<std::pair<int,int>> valid_moves;
+
 	int row;
 	int col;
-	int team; // 1 if White, -1 if Black
+	int team; // -1 if White, 1 if Black
 	Piece::PlayerPiece player_piece;
 };

@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include <iostream>
+#include <algorithm>
 
 #include "piece.h"
 
@@ -41,9 +42,13 @@ private:
  	char humanReadablePieces[NUM_PIECES] = {'_', 'P', 'R', 'B', 'K', 'Q', 'N'};
 
  	int board_state[BOARD_LENGTH][BOARD_LENGTH];
- 	std::vector<Piece> PieceList;
+ 	std::vector<Piece*> PieceList;
  	std::map<char[2], std::vector<char[2]>> possibleMoves;
+
+ 	Piece* pieceArray[BOARD_LENGTH][BOARD_LENGTH];
 
  	void initHumanReadablePieces();
  	void initColCharToNum();
+ 	void newPiece(Piece::PlayerPiece player_piece, int row, int col);
+ 	void removePiece(int row, int col);
 };
