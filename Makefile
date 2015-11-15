@@ -4,8 +4,8 @@ DIR=$(shell pwd)
 OBJDIR=$(DIR)/obj
 SRCDIR=$(DIR)/src
 HEADERDIR=$(SRCDIR)/header
-CFLAGS=-O3 -std=c++11 -I$(HEADERDIR)
-LDFLAGS=
+CFLAGS=-O3 -std=c++11 -I$(HEADERDIR) -fopenmp -Wall
+LDFLAGS= -fopenmp
 
 _DEPS=chess_board.h piece.h
 DEPS=$(patsubst %,$(HEADERDIR)/%,$(_DEPS))

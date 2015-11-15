@@ -34,17 +34,20 @@ public:
 	};
 
 
-	Piece(PlayerPiece player_piece, int row, int col, int** board_state);
+	Piece(PlayerPiece player_piece, int row, int col, int board_state[][BOARD_LENGTH]);
 	Piece(PlayerPiece player_piece, int row, int col);
 	~Piece();
 	Piece::Types typeOf();
-	void move(int row, int col, int** board_state);
+	void move(int row, int col, int board_state[][BOARD_LENGTH]);
 	std::vector<std::pair<int,int>> get_valid_moves();
 	std::pair<int,int> get_coords();
-	void generate_valid_moves(int** board_state);
+	void generate_valid_moves(int board_state[][BOARD_LENGTH]);
+	int get_team();
+	bool threatens_king();
 private:
 	std::vector<std::pair<int,int>> valid_moves;
 
+	bool is_king_threatened = false;
 	int row;
 	int col;
 	int team; // -1 if White, 1 if Black

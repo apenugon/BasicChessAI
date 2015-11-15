@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+
 #include "chess_board.h"
 // This file just initializes the game and contains a num parser to handle everything
 
@@ -13,6 +15,8 @@ int main() {
 	}
 	ChessBoard* myboard = new ChessBoard();
 	myboard->printBoardState();
+	cout << "what is your name?" << endl;
+	delete myboard;
 	return 0;
 }
 
