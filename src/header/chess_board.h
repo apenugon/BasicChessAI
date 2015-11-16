@@ -42,22 +42,25 @@ public:
 
  	ChessBoard();
  	ChessBoard(int board_state[][BOARD_LENGTH], 
-	std::vector<Piece*> PieceListWhite, 
-	std::vector<Piece*> PieceListBlack, 
-	Piece* pieceArray[][BOARD_LENGTH]);
+		std::vector<Piece*> PieceListWhite, 
+		std::vector<Piece*> PieceListBlack, 
+		Piece* pieceArray[][BOARD_LENGTH],
+		Teams team,
+		bool do_generate_moves = true);
  	~ChessBoard();
 	int calculateScore();
  	void printBoardState();
- 	ChessBoard* makeMove(std::pair<int,int> from, std::pair<int,int> to, Teams team);
+ 	ChessBoard* makeMove(MoveType move_type, std::pair<int,int> from, std::pair<int,int> to, bool is_valid = false, bool do_generate_moves = true);
  	int getPrevMoveStatusCode();
 private:
  	// In our definition for the board, the actual 
  	// board is within the range 2-10. So we have an 8x8
  	// board.
 
+    // Vars that contain info from past game boards
 	Teams current_team;
 
- 	char colNumToChar[CHESS_PLAY_LENGTH] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+    char colNumToChar[CHESS_PLAY_LENGTH] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
  	std::map<char, int> colCharToNum;
  	char humanReadablePieces[NUM_PIECES] = {'_', 'P', 'R', 'B', 'K', 'Q', 'N'};
 
@@ -76,8 +79,13 @@ private:
  	void initColCharToNum();
  	void newPiece(Piece::PlayerPiece player_piece, int row, int col, Teams team);
  	void removePiece(int row, int col);
- 	bool isInCheck();
+ 	bool isInCheck(Teams team);
+ 	void generate_piece_moves();
  	void generate_moves();
  	void placePieces();
-
+ 	void move_piece(Piece *piece, 
+				int toRow, 
+				int toCol, 
+				int new_board_state[][BOARD_LENGTH], 
+				Piece* new_pieceArray[][BOARD_LENGTH]);
 };

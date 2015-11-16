@@ -14,9 +14,13 @@ int main() {
 		cout << fib(i) << endl;
 	}
 	ChessBoard* myboard = new ChessBoard();
-	myboard->printBoardState();
-	cout << "what is your name?" << endl;
+	//myboard->printBoardState();
+	cout << "Generated first states" << endl;
+	cout << "Let's make a move!" << endl;
+	//ChessBoard* nextboard = myboard->makeMove(ChessBoard::MOVE, std::make_pair(4, 3), std::make_pair(4, 4));
+	//nextboard->printBoardState();
 	delete myboard;
+	//delete nextboard;
 	return 0;
 }
 
