@@ -52,7 +52,7 @@ public:
 	int calculateScore();
  	void printBoardState();
  	ChessBoard* makeMove(MoveType move_type, std::pair<int,int> from, std::pair<int,int> to, bool is_valid = false, bool do_generate_moves = true);
- 	int getPrevMoveStatusCode();
+ 	ChessBoard* makeMove(MoveType move_type, std::string from, std::string to);
  	void print_available_moves();
  	void check_integrity();
 private:

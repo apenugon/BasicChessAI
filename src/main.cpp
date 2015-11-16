@@ -28,6 +28,11 @@ int main() {
 	ChessBoard* blackMove = nextboard->makeMove(ChessBoard::MOVE, std::make_pair(8, 5), std::make_pair(6, 5));
 	blackMove->printBoardState();
 	blackMove->print_available_moves();
+	auto WhiteMove = blackMove->makeMove(ChessBoard::MOVE, "2a", "3a");
+	WhiteMove->check_integrity();
+	WhiteMove->printBoardState();
+	WhiteMove->print_available_moves();
+	delete blackMove;
 	delete nextboard;
 	delete myboard;
 	//delete nextboard;

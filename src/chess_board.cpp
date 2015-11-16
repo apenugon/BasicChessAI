@@ -13,6 +13,8 @@ void ChessBoard::initColCharToNum() {
 	colCharToNum['h'] = 7;
 }
 
+
+
 void ChessBoard::print_available_moves() {
 	std::string team = current_team == WHITE ? "WHITE" : "BLACK";
 	std::cout << "Available Moves for " << team << std::endl;
@@ -54,16 +56,17 @@ void ChessBoard::move_piece(Piece *piece,
 	piece->move(toRow, toCol, this->board_state);
 	new_board_state[std::get<0>(original_position)][std::get<1>(original_position)] = Piece::Types::NONE;
 	new_board_state[toRow][toCol] = board_state[std::get<0>(original_position)][std::get<1>(original_position)];
+	if (pieceArray[toRow][toCol] != NULL) {
+		removePiece(toRow,toCol);
+	}
 }
 
-/* Return codes - 
--2 - Can't make that move while King is in check
--1 - to is not valid
-0 - There is no piece at from
-1 - ok move 
-3 - ok, a king is now in check 
-4 - ok, player that moved has won
-*/
+ChessBoard* ChessBoard::makeMove(MoveType move_type, std::string from, std::string to) {
+	std::pair<int,int> from_pair = std::make_pair(from.at(0) - '0' + BORDER_DEPTH - 1, colCharToNum[from.at(1)+BORDER_DEPTH]);
+	std::pair<int,int> to_pair = std::make_pair(to.at(0) - '0' + BORDER_DEPTH - 1, colCharToNum[to.at(1)+BORDER_DEPTH]);
+	return makeMove(move_type, from_pair, to_pair);
+}
+
 ChessBoard* ChessBoard::makeMove(MoveType move_type, std::pair<int,int> from, std::pair<int,int> to, bool is_valid, bool do_generate_moves) {
 	auto move = std::make_tuple(move_type, from, to);
 
