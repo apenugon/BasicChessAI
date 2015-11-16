@@ -1,9 +1,7 @@
 The moves will be stored in a _map_ to enable easy iteration.
 
 TODO:
-a) Figure out what is going on with the next gameboard.
-1) Write is in check
-2) Finish make_move
+1) Filter castles that go through check
 3) Write general game handler
 4) Write player (human)
 

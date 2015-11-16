@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <algorithm>
+#include <stdexcept>
 
 #define CHESS_PLAY_LENGTH 8
 #define BORDER_DEPTH 2
@@ -49,6 +50,7 @@ public:
 	bool threatens_king() const;
     bool get_has_moved() const;
     Piece::PlayerPiece get_player_piece()const ;
+    void check_integrity();
 private:
 	std::vector<std::pair<int,int>> valid_moves;
 

@@ -1,5 +1,5 @@
 #include "piece.h"
-#define CAN_PLACE_PIECE(a,b) (board_state[a][b] * team >= 0 && board_state[a][b] != Types::INVALID)
+#define CAN_PLACE_PIECE(a,b) (board_state[a][b] * team <= 0 && board_state[a][b] != Types::INVALID)
 
 // All COORDS here are in real coords (1-12)
 
@@ -7,7 +7,7 @@ void Piece::add_move(int row, int col, int board_state[][BOARD_LENGTH]) {
 	if (CAN_PLACE_PIECE(row,col)) {
 		auto coord = std::make_pair(row,col);
 		valid_moves.push_back(coord);
-		is_king_threatened |= (board_state[row][col] * team >= 0 && abs(board_state[row][col]) == Types::KING);
+		is_king_threatened |= (abs(board_state[row][col]) == Types::KING);
 		#ifdef DEBUG
 		std::cout << "adding move: " << row << " : " << col << std::endl;
 		#endif
@@ -34,7 +34,7 @@ Piece::Piece(PlayerPiece in_player_piece, int inRow, int inCol, int board_state[
 	player_piece = in_player_piece;
 	row = inRow;
 	col = inCol;
-	team = player_piece < 0 ? 1 : -1;
+	team = player_piece < 0 ? -1 : 1;
 	generate_valid_moves(board_state);
 }
 
@@ -50,7 +50,7 @@ Piece::Piece(PlayerPiece in_player_piece, int inRow, int inCol) {
 	player_piece = in_player_piece;
 	row = inRow;
 	col = inCol;
-	team = player_piece < 0 ? 1 : -1;
+	team = player_piece < 0 ? -1 : 1;
 	is_king_threatened = false;
 }
 
@@ -66,6 +66,7 @@ void Piece::move(int inRow, int inCol, int board_state[][BOARD_LENGTH]) {
 	row = inRow;
 	col = inCol;
     this->has_moved = true;
+    this->is_king_threatened = false;
 	//generate_valid_moves(board_state);
 }
 
@@ -84,19 +85,20 @@ void Piece::generate_valid_moves(int board_state[][BOARD_LENGTH]) {
 	#endif
 	is_king_threatened = false;
 	int i;
+	int move_factor = team * -1;
 	Types type = typeOf();
 	switch (type) {
-		case PAWN:
+		case PAWN: // Inverse of team number
 			// Can only move if no piece
-			if (board_state[row+1 * team][col] == Types::NONE)
-			add_move(row + 1 * team, col, board_state);
-			if (board_state[row+1 * team][col] == Types::NONE && (row == 3 || row == 9))
-			add_move(row + 2 * team, col, board_state);
+			if (board_state[row+1 * move_factor][col] == Types::NONE)
+			add_move(row + 1 * move_factor, col, board_state);
+			if (board_state[row+1 * move_factor][col] == Types::NONE && (row == 3 || row == 8))
+			add_move(row + 2 * move_factor, col, board_state);
 			// Can attack diagonally, if there is a piece present
-			if (board_state[row+1*team][col+1] * team > 0 && board_state[row+1*team][col+1] != Types::INVALID)
-				add_move(row + 1 * team, col + 1, board_state);
-			if (board_state[row+1*team][col-1] * team > 0 && board_state[row+1*team][col-1] != Types::INVALID)
-				add_move(row + 1 * team, col - 1, board_state);
+			if (board_state[row+1*move_factor][col+1] * team < 0 && board_state[row+1*move_factor][col+1] != Types::INVALID)
+				add_move(row + 1 * move_factor, col + 1, board_state);
+			if (board_state[row+1*move_factor][col-1] * team < 0 && board_state[row+1*move_factor][col-1] != Types::INVALID)
+				add_move(row + 1 * move_factor, col - 1, board_state);
 			break;
 		case QUEEN:
 		case ROOK:
@@ -179,5 +181,23 @@ void Piece::generate_valid_moves(int board_state[][BOARD_LENGTH]) {
 }
 
 Piece::~Piece() {
+
+}
+
+void Piece::check_integrity() {
+	// Checks integrity of piece
+	bool row_in_bounds = 0 <= this->row && this->row < BOARD_LENGTH;
+	bool col_in_bounds = 0 <= this->col && this->col < BOARD_LENGTH;
+	if (!row_in_bounds) {
+		throw std::runtime_error("Row " + std::to_string(this->row) + " is not in bounds for piece " + std::to_string(player_piece));
+	} 
+
+	if (!col_in_bounds) {
+		throw std::runtime_error("Col " + std::to_string(this->col) + " is not in bounds for piece " + std::to_string(player_piece));
+	}
+
+	if (this->team * this->player_piece <= 0) {
+		throw std::runtime_error("Team mismatch: Piece " + std::to_string(this->player_piece) + " Team " + std::to_string(this->team));
+	}
 
 }

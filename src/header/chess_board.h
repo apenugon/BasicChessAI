@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <tuple>
 #include <functional>
+#include <string>
 
 #include "piece.h"
 
@@ -52,6 +53,8 @@ public:
  	void printBoardState();
  	ChessBoard* makeMove(MoveType move_type, std::pair<int,int> from, std::pair<int,int> to, bool is_valid = false, bool do_generate_moves = true);
  	int getPrevMoveStatusCode();
+ 	void print_available_moves();
+ 	void check_integrity();
 private:
  	// In our definition for the board, the actual 
  	// board is within the range 2-10. So we have an 8x8

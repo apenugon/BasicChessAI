@@ -13,6 +13,21 @@ void ChessBoard::initColCharToNum() {
 	colCharToNum['h'] = 7;
 }
 
+void ChessBoard::print_available_moves() {
+	std::string team = current_team == WHITE ? "WHITE" : "BLACK";
+	std::cout << "Available Moves for " << team << std::endl;
+	for (auto m : valid_moves) {
+		std::string move = std::get<0>(m) == MOVE ? "MOVE" : "CASTLE";
+		auto from = std::get<1>(m);
+		auto to = std::get<2>(m);
+		int from_row = std::get<0>(from);
+		int from_col = std::get<1>(from);
+		int to_row = std::get<0>(to);
+		int to_col = std::get<1>(to);
+		std::cout << move << " " << from_row-BORDER_DEPTH+1 << colNumToChar[from_col-BORDER_DEPTH] << " " << to_row-BORDER_DEPTH+1 << colNumToChar[to_col-BORDER_DEPTH] << std::endl;
+	}
+}
+
 bool ChessBoard::isInCheck(Teams team) {
 	bool isInCheck = false;
 	// Find king
@@ -66,11 +81,11 @@ ChessBoard* ChessBoard::makeMove(MoveType move_type, std::pair<int,int> from, st
 	// Construct a new board
 
 	auto next_team = current_team == WHITE ? BLACK : WHITE;
-	auto current_piece_list = current_team == WHITE ? &PieceListWhite : &PieceListBlack;
 	int new_board_state[BOARD_LENGTH][BOARD_LENGTH];
 	Piece* new_pieceArray[BOARD_LENGTH][BOARD_LENGTH];
 	std::vector<Piece*> newPieceListWhite;
 	std::vector<Piece*> newPieceListBlack;
+	auto current_piece_list = current_team == WHITE ? &newPieceListWhite : &newPieceListBlack;
 
 	// Here I need to copy over both piece lists into a new piece list. The pieces need to be distinct
 
@@ -94,7 +109,7 @@ ChessBoard* ChessBoard::makeMove(MoveType move_type, std::pair<int,int> from, st
 	switch (move_type) {
 		case CASTLE: {
 			auto king = current_piece_list->front();
-			auto rook = pieceArray[std::get<0>(to)][std::get<1>(to)];
+			auto rook = new_pieceArray[std::get<0>(to)][std::get<1>(to)];
 			// Determine if this is a left castle or a right castle
 			if (std::get<1>(to) < std::get<1>(from)) {
 				// Left Castle
@@ -109,7 +124,7 @@ ChessBoard* ChessBoard::makeMove(MoveType move_type, std::pair<int,int> from, st
 		}
 		default:
 			// Just do a normal move
-			auto piece_to_move = pieceArray[std::get<0>(from)][std::get<1>(from)];
+			auto piece_to_move = new_pieceArray[std::get<0>(from)][std::get<1>(from)];
 			move_piece(piece_to_move, std::get<0>(to), std::get<1>(to), new_board_state, new_pieceArray);
 	}
 
@@ -206,6 +221,9 @@ void ChessBoard::placePieces() {
 	newPiece(Piece::BLACK_QUEEN, BOARD_LENGTH-BORDER_DEPTH-1, BORDER_DEPTH+3, BLACK);
 	//Black Queen
 
+	#ifdef DEBUG
+	check_integrity();
+	#endif
 }
 
 void ChessBoard::generate_piece_moves() {
@@ -223,9 +241,16 @@ void ChessBoard::generate_moves() {
 	std::vector<Piece*>* useVector = this->current_team == WHITE ? &PieceListWhite : &PieceListBlack;
 	int castle_row = this->current_team == WHITE ? BORDER_DEPTH : BOARD_LENGTH - BORDER_DEPTH - 1;
 
+	Piece* king;
+	for (auto p : (*useVector)) {
+		if (p->typeOf() == Piece::Types::KING) {
+			king = p;
+			break;
+		}
+	}
+
 	// Note - if in check, only the king counts. Otherwise, everything does
 	if (isInCheck(this->current_team)) {
-		auto king = useVector->front();
 		for (auto move : king->get_valid_moves()) {
 			auto move_tuple = std::make_tuple(MOVE, king->get_coords(), move);
 			valid_moves.push_back(move_tuple);
@@ -243,36 +268,39 @@ void ChessBoard::generate_moves() {
 	// Add in Castling moves
 	// 6 different conditions
 
-	auto king = useVector->front();
-    
+    auto coords = king->get_coords();
+    int kingRow = std::get<0>(coords);
+    int kingCol = std::get<1>(coords);
+
 	// Check if king was moved and King not in check
 	if (!isInCheck(this->current_team) && king->get_has_moved() == false) {
 		// Rook Left
-		auto rook = pieceArray[a][castle_row];
+		auto rook = pieceArray[castle_row][a];
 		if (rook != NULL && 
 			rook ->get_has_moved() == false &&
 			rook->typeOf() == Piece::Types::ROOK) {
 			// Check if the intervening spaces are free
 			bool areFree = true;
-			for (int i = std::get<1>(king->get_coords()) - 1; i > a; i--) {
-				if (board_state[a][b] != Piece::Types::NONE) {
+			for (int i = kingCol - 1; i > a; i--) {
+				// Also check if we are castling through check
+				if (board_state[castle_row][i] != Piece::Types::NONE) {
 					areFree = false;
 				}
 			}
 			if (areFree) {
-				auto move = std::make_tuple(CASTLE, king->get_coords(), rook->get_coords());
+				auto move = std::make_tuple(CASTLE, coords, rook->get_coords());
 				valid_moves.push_back(move);
 			}
 		}
 		// Rook Right
-		rook = pieceArray[h][castle_row];
+		rook = pieceArray[castle_row][h];
 		if (rook != NULL && 
 			rook ->get_has_moved() == false &&
 			rook->typeOf() == Piece::Types::ROOK) {
 			// Check if the intervening spaces are free
 			bool areFree = true;
-			for (int i = std::get<1>(king->get_coords()) - 1; i < h; i++) {
-				if (board_state[a][b] != Piece::Types::NONE) {
+			for (int i = kingCol + 1; i < h; i++) {
+				if (board_state[castle_row][i] != Piece::Types::NONE) {
 					areFree = false;
 				}
 			}
@@ -286,9 +314,6 @@ void ChessBoard::generate_moves() {
 
 	// Rook 1:
 	// Was the rook moved?
-
-
-	std::cout << "I made it here bro" << std::endl << std::endl;
 
 	//Are there pieces in between?
 	auto filter_function = [this] (std::tuple<MoveType, std::pair<int,int>,std::pair<int,int>> move) {
@@ -333,6 +358,9 @@ ChessBoard::ChessBoard(int board_state[][BOARD_LENGTH],
 
 	generate_piece_moves();
 	if (do_generate_moves) {
+		#ifdef DEBUG
+		std::cout << "Generate Moves" << std::endl;
+		#endif
 		generate_moves();
 	}
 
@@ -360,7 +388,6 @@ ChessBoard::ChessBoard() {
 	// Place pieces on chess board
 	placePieces();
 	generate_piece_moves();
-	printBoardState();
 	generate_moves();
 }
 
@@ -385,4 +412,52 @@ void ChessBoard::printBoardState() {
 	}
 	cout << "  ----------------------- " << endl;
 	cout << "   a  b  c  d  e  f  g  h " << endl << endl;
+}
+
+void ChessBoard::check_integrity() {
+	// Checks the integrity of all chessboard components.
+	for (auto p : PieceListWhite) {
+		if (p->get_team() != WHITE) {
+			std::runtime_error("Piece list mismatch, white");
+		}
+		auto coords = p->get_coords();
+		int row = std::get<0>(coords);
+		int col = std::get<1>(coords);
+		if (board_state[row][col] != p->get_player_piece()) {
+			std::runtime_error("Piece board mismatch");
+		}
+		if (pieceArray[row][col] != p) {
+			std::runtime_error("Piece/pieceArray mismatch");
+		}
+		p->check_integrity();
+	}
+	for (auto p : PieceListBlack) {
+		if (p->get_team() != BLACK) {
+			std::runtime_error("Piece list mismatch, black");
+		}
+		auto coords = p->get_coords();
+		int row = std::get<0>(coords);
+		int col = std::get<1>(coords);
+		if (board_state[row][col] != p->get_player_piece()) {
+			std::runtime_error("Piece board mismatch");
+		}
+		if (pieceArray[row][col] != p) {
+			std::runtime_error("Piece/pieceArray mismatch");
+		}
+		p->check_integrity();
+	}
+	for (int i = 0; i < BOARD_LENGTH; i++) {
+		for (int j = 0; j < BOARD_LENGTH; j++) {
+			if (pieceArray[i][j] != NULL) {
+				Piece* thisPiece = pieceArray[i][j];
+				if (thisPiece->get_player_piece() != board_state[i][j]) {
+					std::runtime_error("Piece in Piece array is incorrect");
+				}
+			} else {
+				if (board_state[i][j] != Piece::Types::NONE && board_state[i][j] != Piece::Types::INVALID) {
+					std::runtime_error("Board state and Piece array do not match");
+				} 
+			}
+		}
+	}
 }

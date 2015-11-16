@@ -17,8 +17,18 @@ int main() {
 	//myboard->printBoardState();
 	cout << "Generated first states" << endl;
 	cout << "Let's make a move!" << endl;
-	//ChessBoard* nextboard = myboard->makeMove(ChessBoard::MOVE, std::make_pair(4, 3), std::make_pair(4, 4));
-	//nextboard->printBoardState();
+	myboard->printBoardState();
+	myboard->print_available_moves();
+	myboard->check_integrity();
+	ChessBoard* nextboard = myboard->makeMove(ChessBoard::MOVE, std::make_pair(3, 4), std::make_pair(4, 4));
+	//Should now be Black's turn
+	nextboard->check_integrity();
+	nextboard->printBoardState();
+	nextboard->print_available_moves();
+	ChessBoard* blackMove = nextboard->makeMove(ChessBoard::MOVE, std::make_pair(8, 5), std::make_pair(6, 5));
+	blackMove->printBoardState();
+	blackMove->print_available_moves();
+	delete nextboard;
 	delete myboard;
 	//delete nextboard;
 	return 0;
