@@ -236,6 +236,18 @@ void ChessBoard::generate_piece_moves() {
 	}
 }
 
+bool ChessBoard::square_in_danger(int row, int col) {
+	std::vector<Piece*>* opposing_pieces = this->current_team == WHITE ? &PieceListBlack : &PieceListWhite;
+	for (auto p : (*opposing_pieces)) {
+		for (auto m : p->get_valid_moves()) {
+			if (row == std::get<0>(m) && col == std::get<1>(m)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 void ChessBoard::generate_moves() {
 	// Only generate moves for the current team
 	std::vector<Piece*>* useVector = this->current_team == WHITE ? &PieceListWhite : &PieceListBlack;
@@ -269,7 +281,6 @@ void ChessBoard::generate_moves() {
 	// 6 different conditions
 
     auto coords = king->get_coords();
-    int kingRow = std::get<0>(coords);
     int kingCol = std::get<1>(coords);
 
 	// Check if king was moved and King not in check
@@ -283,8 +294,10 @@ void ChessBoard::generate_moves() {
 			bool areFree = true;
 			for (int i = kingCol - 1; i > a; i--) {
 				// Also check if we are castling through check
-				if (board_state[castle_row][i] != Piece::Types::NONE) {
+				if (board_state[castle_row][i] != Piece::Types::NONE ||
+					square_in_danger(castle_row, i)) {
 					areFree = false;
+					break;
 				}
 			}
 			if (areFree) {
@@ -300,8 +313,10 @@ void ChessBoard::generate_moves() {
 			// Check if the intervening spaces are free
 			bool areFree = true;
 			for (int i = kingCol + 1; i < h; i++) {
-				if (board_state[castle_row][i] != Piece::Types::NONE) {
+				if (board_state[castle_row][i] != Piece::Types::NONE ||
+					square_in_danger(castle_row, i)) {
 					areFree = false;
+					break;
 				}
 			}
 			if (areFree) {

@@ -91,4 +91,5 @@ private:
 				int toCol, 
 				int new_board_state[][BOARD_LENGTH], 
 				Piece* new_pieceArray[][BOARD_LENGTH]);
+ 	bool square_in_danger(int row, int col);
 };
