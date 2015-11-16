@@ -61,6 +61,14 @@ void ChessBoard::move_piece(Piece *piece,
 	}
 }
 
+ChessBoard* ChessBoard::makeMove(std::tuple<MoveType, std::string, std::string> move) {
+	return makeMove(std::get<0>(move), std::get<1>(move), std::get<2>(move));
+}
+
+ChessBoard* ChessBoard::makeMove(std::tuple<MoveType, std::pair<int,int>, std::pair<int,int>> move) {
+	return makeMove(std::get<0>(move), std::get<1>(move), std::get<2>(move));
+}
+
 ChessBoard* ChessBoard::makeMove(MoveType move_type, std::string from, std::string to) {
 	std::pair<int,int> from_pair = std::make_pair(from.at(0) - '0' + BORDER_DEPTH - 1, colCharToNum[from.at(1)+BORDER_DEPTH]);
 	std::pair<int,int> to_pair = std::make_pair(to.at(0) - '0' + BORDER_DEPTH - 1, colCharToNum[to.at(1)+BORDER_DEPTH]);
@@ -223,10 +231,6 @@ void ChessBoard::placePieces() {
 	//Black King
 	newPiece(Piece::BLACK_QUEEN, BOARD_LENGTH-BORDER_DEPTH-1, BORDER_DEPTH+3, BLACK);
 	//Black Queen
-
-	#ifdef DEBUG
-	check_integrity();
-	#endif
 }
 
 void ChessBoard::generate_piece_moves() {
@@ -430,6 +434,10 @@ void ChessBoard::printBoardState() {
 	}
 	cout << "  ----------------------- " << endl;
 	cout << "   a  b  c  d  e  f  g  h " << endl << endl;
+}
+
+bool ChessBoard::is_game_over() {
+	return false;
 }
 
 void ChessBoard::check_integrity() {

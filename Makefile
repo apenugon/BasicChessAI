@@ -7,10 +7,10 @@ HEADERDIR=$(SRCDIR)/header
 CFLAGS=-std=c++11 -I$(HEADERDIR) -fopenmp
 LDFLAGS= -fopenmp
 
-_DEPS=chess_board.h piece.h
+_DEPS=chess_board.h piece.h game_handler.h player.h human_player.h
 DEPS=$(patsubst %,$(HEADERDIR)/%,$(_DEPS))
 
-_OBJS=main.o chess_board.o piece.o
+_OBJS=main.o chess_board.o piece.o game_handler.o human_player.o
 OBJS=$(patsubst %,$(OBJDIR)/%, $(_OBJS))
 
 default: CFLAGS += -O3

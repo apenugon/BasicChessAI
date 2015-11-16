@@ -53,8 +53,11 @@ public:
  	void printBoardState();
  	ChessBoard* makeMove(MoveType move_type, std::pair<int,int> from, std::pair<int,int> to, bool is_valid = false, bool do_generate_moves = true);
  	ChessBoard* makeMove(MoveType move_type, std::string from, std::string to);
+ 	ChessBoard* makeMove(std::tuple<MoveType, std::string, std::string> move);
+ 	ChessBoard* makeMove(std::tuple<MoveType, std::pair<int,int>, std::pair<int,int>> move);
  	void print_available_moves();
  	void check_integrity();
+ 	bool is_game_over();
 private:
  	// In our definition for the board, the actual 
  	// board is within the range 2-10. So we have an 8x8
