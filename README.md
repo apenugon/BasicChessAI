@@ -1,9 +1,7 @@
 The moves will be stored in a _map_ to enable easy iteration.
 
 TODO:
-1) Filter castles that go through check
-3) Write general game handler
-4) Write player (human)
-
-CURRENT GOAL:
-1) Get PvP working
+1) Write an evaluation function
+2) Write alpha-beta pruning for C++
+3) Play, detect bugs
+4) Adjust the game such that it can take in arbitrary file inputs

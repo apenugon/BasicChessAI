@@ -320,10 +320,6 @@ void ChessBoard::generate_moves() {
 		}
 
 	}
-    
-    print_available_moves();
-	// Rook 1:
-	// Was the rook moved?
 
 	//Are there pieces in between?
 	auto filter_function = [this] (std::tuple<MoveType, std::pair<int,int>,std::pair<int,int>> move) {
@@ -341,9 +337,8 @@ void ChessBoard::generate_moves() {
 		return is_invalid_move;
 	};
 
+    // Filters the moves by whether or not the king is present
 	valid_moves.erase(std::remove_if(valid_moves.begin(), valid_moves.end(), filter_function), valid_moves.end());
-
-	// Now filter all moves bahttp://preshing.com/20110811/xkcd-password-generator/sed on whether or not the king is in check afterwards (probably the most computationally intensive)
 }
 
 // Creates a new chessboard, set up with the next board state.
@@ -441,7 +436,8 @@ void ChessBoard::printBoardState() {
 }
 
 bool ChessBoard::is_game_over() {
-	return false;
+    // The game is only over when a team has no moves left to make.
+	return valid_moves.length() == 0;
 }
 
 void ChessBoard::check_integrity() {
