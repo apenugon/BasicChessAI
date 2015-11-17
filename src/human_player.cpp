@@ -51,6 +51,10 @@ std::tuple<ChessBoard::MoveType, std::string, std::string> HumanPlayer::get_move
 		else if (command.compare("PRINT") == 0) {
 			board->printBoardState();
 		}
+        
+        else if (command.compare("EXIT") == 0) {
+            exit(0);
+        }
 
 		else if (command.compare("HELP") == 0) {
             std::cout << "CASTLE <coord1> <coord2> - Perform a castling move if possible," << std::endl;

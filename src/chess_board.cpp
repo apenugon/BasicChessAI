@@ -437,7 +437,7 @@ void ChessBoard::printBoardState() {
 
 bool ChessBoard::is_game_over() {
     // The game is only over when a team has no moves left to make.
-	return valid_moves.length() == 0;
+	return valid_moves.size() == 0;
 }
 
 void ChessBoard::check_integrity() {
