@@ -50,16 +50,43 @@ bool Piece::get_has_moved() const {
     return this->has_moved;
 }
 
+int Piece::get_move_counter() {
+    return this->move_counter;
+}
+
 void Piece::move(int inRow, int inCol, int board_state[][BOARD_LENGTH]) {
-	row = inRow;
+	// Set whether or not pawn moved forward twice - used for En Pessent
+    if (this->typeOf() == PAWN) {
+        this->special_move_used |= abs(inRow - this->row) == 2;
+    }
+
+    this->move_counter++;
+    this->same_pos_counter = 0;
+
+    row = inRow;
 	col = inCol;
     this->has_moved = true;
     this->is_king_threatened = false;
+
     // Metamorphosize Pawn into Queen if its at the last row
-    if ((this->player_piece == WHITE_PAWN && this->row == 9) ||
-        (this->player_piece == BLACK_PAWN && this->row == 2)) {
+    // Actually this should be done at the board level
+}
+
+bool Piece::promote() {
+    bool toPromote = (this->player_piece == WHITE_PAWN && this->row == 9) ||
+        (this->player_piece == BLACK_PAWN && this->row == 2);
+    if (toPromote)
         this->player_piece = (PlayerPiece)(QUEEN * this->team);
-    }
+
+    return toPromote;
+}
+
+bool Piece::is_special_move_used() {
+    return special_move_used;
+}
+
+int Piece::get_same_pos_counter() {
+    return same_pos_counter;
 }
 
 Piece::Types Piece::typeOf() const {
@@ -76,6 +103,7 @@ void Piece::generate_valid_moves(int board_state[][BOARD_LENGTH]) {
 	//std::cout << "Coords: " << this->row << " : " << this->col << "has moved " << has_moved << std::endl;
 	#endif
 	valid_moves.clear(); // Starting from scratch
+    same_pos_counter++;
 
 	this->is_king_threatened = false;
 	int i;

@@ -48,8 +48,12 @@ public:
 	int get_team() const;
 	bool threatens_king() const;
     bool get_has_moved() const;
+    bool promote();
     Piece::PlayerPiece get_player_piece()const ;
     void check_integrity();
+    bool is_special_move_used();
+    int get_same_pos_counter();
+    int get_move_counter();
 private:
 	std::vector<std::pair<int,int>> valid_moves;
 
@@ -58,6 +62,9 @@ private:
 	int row;
 	int col;
 	int team; // -1 if White, 1 if Black
+    bool special_move_used = false;
+    int same_pos_counter = 0;
+    int move_counter = 0;
 	Piece::PlayerPiece player_piece;
 	void add_move(int row, int col, int board_state[][BOARD_LENGTH]);
 };

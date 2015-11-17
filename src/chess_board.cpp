@@ -114,11 +114,24 @@ ChessBoard* ChessBoard::makeMove(MoveType move_type, std::pair<int,int> from, st
 
 	// Here I need to copy over both piece lists into a new piece list. The pieces need to be distinct
 
-	for (int i = 0; i < BOARD_LENGTH; i++) {
+    int fromRow = std::get<0>(from);
+    int fromCol = std::get<1>(from);
+    int toRow = std::get<0>(to);
+    int toCol = std::get<1>(to);
+
+    // Check for En Pessent
+    if (abs(fromRow - toRow) == 1 &&
+        abs(fromCol - toCol) == 1 &&
+        pieceArray[fromRow][fromCol]->typeOf() == Piece::Types::PAWN &&
+        pieceArray[toRow][toCol] == NULL) {
+        toRow = fromRow;
+    }
+
+    for (int i = 0; i < BOARD_LENGTH; i++) {
 		for (int j = 0; j < BOARD_LENGTH; j++) {
 			new_board_state[i][j] = board_state[i][j];
 			if (pieceArray[i][j] != NULL) {
-				if (move_type == MOVE && i == std::get<0>(to) && j == std::get<1>(to)) {
+				if (move_type == MOVE && i == toRow && j == toCol) {
 					// This piece is being taken - we don't need it in the next board
 					new_pieceArray[i][j] = NULL;
 					new_board_state[i][j] = Piece::Types::NONE;
@@ -228,11 +241,18 @@ void ChessBoard::placePieces() {
 }
 
 void ChessBoard::generate_piece_moves() {
+    // First check if there are any pieces to be promoted, then
 	// Generate opposing pieces' moves.
 	for (auto p : PieceListBlack) {
+        if (p->promote()) {
+            board_state[std::get<0>(p->get_coords())][std::get<1>(p->get_coords())] = (int)(p->get_player_piece());
+        }
 		p->generate_valid_moves(board_state);
 	}
 	for (auto p : PieceListWhite) {
+        if (p->promote()) {
+            board_state[std::get<0>(p->get_coords())][std::get<1>(p->get_coords())] = (int)(p->get_player_piece());
+        }
 		p->generate_valid_moves(board_state);
 	}
 }
@@ -270,6 +290,34 @@ void ChessBoard::generate_moves() {
 			valid_moves.push_back(move_tuple);
 		}
 	}
+
+    // Generate En Passent moves
+    for (auto p : (*useVector)) {
+        if (p->typeOf() == Piece::Types::PAWN) {
+            // Now check for En Passent conditions
+            int row = std::get<0>(p->get_coords());
+            int col = std::get<1>(p->get_coords());
+
+            // Left Side:
+            if (pieceArray[row][col-1] != NULL &&
+                pieceArray[row][col-1]->is_special_move_used() == true &&
+                pieceArray[row][col-1]->get_same_pos_counter() == 1 &&
+                pieceArray[row][col-1]->get_move_counter() == 1 &&
+                pieceArray[row][col-1]->get_team() != this->current_team) {
+                auto move_tuple = std::make_tuple(MOVE, p->get_coords(), std::make_pair(row-current_team, col-1));
+                valid_moves.push_back(move_tuple);
+            }
+            // Right
+            if (pieceArray[row][col+1] != NULL &&
+                pieceArray[row][col+1]->is_special_move_used() == true &&
+                pieceArray[row][col+1]->get_same_pos_counter() == 1 &&
+                pieceArray[row][col+1]->get_move_counter() == 1 &&
+                pieceArray[row][col+1]->get_team() != this->current_team) {
+                auto move_tuple = std::make_tuple(MOVE, p->get_coords(), std::make_pair(row-current_team, col+1));
+                valid_moves.push_back(move_tuple);
+            }
+        }
+}
 
 	// Add in Castling moves
 	// 6 different conditions
