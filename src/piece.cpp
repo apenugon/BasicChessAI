@@ -1,5 +1,6 @@
 #include "piece.h"
 #define CAN_PLACE_PIECE(a,b) (board_state[a][b] * team <= 0 && board_state[a][b] != Types::INVALID)
+#define TEST_OPPOSING_PIECE(a,b) if (board_state[a][b] * team < 0) break;
 
 // All COORDS here are in real coords (1-12)
 
@@ -9,7 +10,7 @@ void Piece::add_move(int row, int col, int board_state[][BOARD_LENGTH]) {
 		valid_moves.push_back(coord);
 		is_king_threatened |= (abs(board_state[row][col]) == Types::KING);
 		#ifdef DEBUG
-		std::cout << "adding move: " << row << " : " << col << std::endl;
+		//std::cout << "adding move: " << row << " : " << col << std::endl;
 		#endif
 	} 
 }
@@ -18,24 +19,11 @@ Piece::PlayerPiece Piece::get_player_piece() const {
 	return player_piece;
 }
 
-Piece::Piece(const Piece& piece) {
-	auto coords = piece.get_coords();
-	this->player_piece = piece.get_player_piece();
-	this->row = std::get<0>(coords);
-	this->col = std::get<1>(coords);
-	this->team = piece.get_team();
-	this->is_king_threatened = piece.threatens_king();
-	this->has_moved = piece.get_has_moved();
-
-
-}
-
 Piece::Piece(PlayerPiece in_player_piece, int inRow, int inCol, int board_state[][BOARD_LENGTH]) {
 	player_piece = in_player_piece;
 	row = inRow;
 	col = inCol;
 	team = player_piece < 0 ? -1 : 1;
-	generate_valid_moves(board_state);
 }
 
 int Piece::get_team() const {
@@ -67,7 +55,11 @@ void Piece::move(int inRow, int inCol, int board_state[][BOARD_LENGTH]) {
 	col = inCol;
     this->has_moved = true;
     this->is_king_threatened = false;
-	//generate_valid_moves(board_state);
+    // Metamorphosize Pawn into Queen if its at the last row
+    if ((this->player_piece == WHITE_PAWN && this->row == 9) ||
+        (this->player_piece == BLACK_PAWN && this->row == 2)) {
+        this->player_piece = (PlayerPiece)(QUEEN * this->team);
+    }
 }
 
 Piece::Types Piece::typeOf() const {
@@ -80,10 +72,12 @@ std::vector<std::pair<int,int>> Piece::get_valid_moves() const {
 
 void Piece::generate_valid_moves(int board_state[][BOARD_LENGTH]) {
 	#ifdef DEBUG
-	std::cout << player_piece << " generating moves " << "Team: " << team << std::endl;
-	std::cout << "Coords: " << this->row << " : " << this->col << "has moved " << has_moved << std::endl;
+	//std::cout << player_piece << " generating moves " << "Team: " << team << std::endl;
+	//std::cout << "Coords: " << this->row << " : " << this->col << "has moved " << has_moved << std::endl;
 	#endif
-	is_king_threatened = false;
+	valid_moves.clear(); // Starting from scratch
+
+	this->is_king_threatened = false;
 	int i;
 	int move_factor = team * -1;
 	Types type = typeOf();
@@ -106,24 +100,28 @@ void Piece::generate_valid_moves(int board_state[][BOARD_LENGTH]) {
 			i = col;
 			do {
 				add_move(row, i, board_state);
+                TEST_OPPOSING_PIECE(row, i);
 				i++;
 			} while (CAN_PLACE_PIECE(row, i));
 			// Horizontal Negative
 			i = col;
 			do {
 				add_move(row, i, board_state);
+                TEST_OPPOSING_PIECE(row, i);
 				i--;
 			} while (CAN_PLACE_PIECE(row, i));
 			// Vertical Positive
 			i = row;
 			do {
 				add_move(i, col, board_state);
+                TEST_OPPOSING_PIECE(i, col);
 				i++;
 			} while (CAN_PLACE_PIECE(i, col));
 			// Vertical Negative
 			i = row;
 			do {
 				add_move(i, col, board_state);
+                TEST_OPPOSING_PIECE(i, col);
 				i--;
 			} while (CAN_PLACE_PIECE(i, col));
 			// Allow case for Queen to pass through
@@ -134,24 +132,28 @@ void Piece::generate_valid_moves(int board_state[][BOARD_LENGTH]) {
 			i = 0;
 			do {
 				add_move(row+i, col+i, board_state);
+                TEST_OPPOSING_PIECE(row+i, col+i);
 				i++;
 			} while (CAN_PLACE_PIECE(row+i, col+i));
 			// Diagonal Down Left
 			i = 0;
 			do {
 				add_move(row+i, col+i, board_state);
+                TEST_OPPOSING_PIECE(row+i, col+i);
 				i--;
 			} while (CAN_PLACE_PIECE(row+i, col+i));
 			// Diagonal Up Left
 			i = 0;
 			do {
 				add_move(row+i, col-i, board_state);
+                TEST_OPPOSING_PIECE(row+i, col-i);
 				i++;
 			} while (CAN_PLACE_PIECE(row+i, col-i));
 			// Diagonal Down Right
 			i = 0;
 			do {
 				add_move(row+i, col-i, board_state);
+                TEST_OPPOSING_PIECE(row+i, col-i);
 				i--;
 			} while (CAN_PLACE_PIECE(row+i,col-i));
 			break;

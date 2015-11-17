@@ -39,7 +39,6 @@ public:
 
 	Piece(PlayerPiece player_piece, int row, int col, int board_state[][BOARD_LENGTH]);
 	Piece(PlayerPiece player_piece, int row, int col);
-	Piece(const Piece&);
 	~Piece();
 	Piece::Types typeOf() const;
 	void move(int row, int col, int board_state[][BOARD_LENGTH]);

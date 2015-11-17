@@ -18,12 +18,14 @@ HumanPlayer::~HumanPlayer() {
 
 std::tuple<ChessBoard::MoveType, std::string, std::string> HumanPlayer::get_move(ChessBoard* board) {
 
-	std::cin.ignore();
 	while (1) {
 		std::cout << name << "@ChessGame> ";
 		std::string input;
 		std::getline(std::cin, input);
 		std::cout << std::endl;
+
+        if (input.length() == 0)
+            continue;
 
 		std::stringstream stream(input);
 		std::string buffer;
@@ -51,6 +53,8 @@ std::tuple<ChessBoard::MoveType, std::string, std::string> HumanPlayer::get_move
 		}
 
 		else if (command.compare("HELP") == 0) {
+            std::cout << "CASTLE <coord1> <coord2> - Perform a castling move if possible," << std::endl;
+            std::cout << "                         - where coord1 is the king and coord2 the rook" << std::endl;
 			std::cout << "HELP - show this dialog" << std::endl;
 			std::cout << "MOVES - prints a list of available moves" << std::endl;
 			std::cout << "MOVE <coord1> <coord2> - prints a list of available moves" << std::endl;
@@ -58,6 +62,13 @@ std::tuple<ChessBoard::MoveType, std::string, std::string> HumanPlayer::get_move
 			std::cout << "PRINT - print board state" << std::endl;
 			std::cout << "EXIT - Exit game" << std::endl;
 		}
+
+#ifdef DEBUG
+        else if (command.compare("INTEG") == 0) {
+            std::cout << "Performing integrity check..." << std::endl;
+            board->check_integrity();
+        }
+#endif
 
 		else {
 			std::cout << "Not a valid move - type HELP for possible inputs" << std::endl;

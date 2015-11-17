@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"get_",
+				"get_coords"
+			],
+			[
 				"is",
 				"isHumanP2"
 			],
@@ -34,10 +38,6 @@
 			[
 				"castl",
 				"castle_row"
-			],
-			[
-				"get_",
-				"get_valid_moves"
 			],
 			[
 				"opp",
@@ -223,47 +223,7 @@
 			"file": "src/header/chess_board.h",
 			"settings":
 			{
-				"buffer_size": 2568,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/header/game_handler.h",
-			"settings":
-			{
-				"buffer_size": 203,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/game_handler.cpp",
-			"settings":
-			{
-				"buffer_size": 818,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/header/human_player.h",
-			"settings":
-			{
-				"buffer_size": 252,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/human_player.cpp",
-			"settings":
-			{
-				"buffer_size": 1958,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/header/player.h",
-			"settings":
-			{
-				"buffer_size": 233,
+				"buffer_size": 2530,
 				"line_ending": "Unix"
 			}
 		},
@@ -271,7 +231,7 @@
 			"file": "src/main.cpp",
 			"settings":
 			{
-				"buffer_size": 1432,
+				"buffer_size": 1418,
 				"line_ending": "Unix"
 			}
 		},
@@ -279,15 +239,15 @@
 			"file": "src/piece.cpp",
 			"settings":
 			{
-				"buffer_size": 5739,
+				"buffer_size": 5402,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/chess_board.cpp",
+			"file": "src/header/piece.h",
 			"settings":
 			{
-				"buffer_size": 15714,
+				"buffer_size": 1401,
 				"line_ending": "Unix"
 			}
 		}
@@ -379,7 +339,7 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 359.0,
+		"height": 117.0,
 		"last_filter": "push",
 		"selected_items":
 		[
@@ -479,13 +439,18 @@
 	],
 	"file_history":
 	[
+		"/home/akul/Documents/HKU/AI/Project/valgrind.log",
+		"/home/akul/Documents/HKU/AI/Project/src/header/game_handler.h",
+		"/home/akul/Documents/HKU/AI/Project/src/game_handler.cpp",
+		"/home/akul/Documents/HKU/AI/Project/src/human_player.cpp",
+		"/home/akul/Documents/HKU/AI/Project/src/piece.cpp",
+		"/home/akul/Documents/HKU/AI/Project/src/header/human_player.h",
+		"/home/akul/Documents/HKU/AI/Project/src/header/player.h",
 		"/home/akul/Documents/HKU/AI/Project/Makefile",
 		"/home/akul/Documents/HKU/AI/Project/src/header/piece.h",
 		"/home/akul/Documents/HKU/AI/Project/.gitignore",
-		"/home/akul/Documents/HKU/AI/Project/src/piece.cpp",
 		"/home/akul/Documents/HKU/AI/Project/README.md",
 		"/home/akul/Documents/HKU/AI/Project/src/main.cpp",
-		"/home/akul/Documents/HKU/AI/Project/valgrind.log",
 		"/home/akul/Documents/HKU/AI/Project/AIProject.sublime-project",
 		"/home/akul/Documents/HKU/AI/Project/src/chess_board.cpp",
 		"/home/akul/Documents/HKU/AI/Project/AIProject",
@@ -508,9 +473,15 @@
 	},
 	"find_state":
 	{
-		"case_sensitive": true,
+		"case_sensitive": false,
 		"find_history":
 		[
+			"generate_valid",
+			"Invalid",
+			"invalid",
+			"generate_valid_moves",
+			"new",
+			"remove",
 			"delete",
 			"check_in",
 			"CASTLE",
@@ -571,7 +542,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -580,15 +551,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2568,
+						"buffer_size": 2530,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1247,
-								1247
+								2018,
+								2018
 							]
 						],
 						"settings":
@@ -596,63 +567,65 @@
 							"syntax": "Packages/C++/C++.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 357.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/header/game_handler.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 203,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								25,
-								25
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1140.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "src/game_handler.cpp",
+					"buffer": 1,
+					"file": "src/main.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 818,
+						"buffer_size": 1418,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								686,
-								686
+								355,
+								355
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage"
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
-						"translation.x": -0.0,
-						"translation.y": 153.0,
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/piece.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5402,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1180,
+								1180
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 618.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
@@ -660,182 +633,44 @@
 				},
 				{
 					"buffer": 3,
-					"file": "src/header/human_player.h",
+					"file": "src/header/piece.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 252,
+						"buffer_size": 1401,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								18,
-								18
+								1120,
+								1120
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage"
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 810.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
 					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/human_player.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1958,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								674,
-								674
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 306.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "src/header/player.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 233,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								233,
-								233
-							]
-						],
-						"settings":
-						{
-							"auto_name": "",
-							"syntax": "Packages/C++/C++.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "src/main.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1432,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								206,
-								206
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 102.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "src/piece.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5739,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 2941.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "src/chess_board.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 15714,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								13641,
-								13641
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 24.0,
-						"translation.y": 6025.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
 				}
+			]
+		},
+		{
+			"sheets":
+			[
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 25.0
+		"height": 26.0
 	},
 	"input":
 	{
@@ -850,11 +685,18 @@
 				0,
 				1,
 				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
 			]
 		],
 		"cols":
 		[
 			0.0,
+			0.5,
 			1.0
 		],
 		"rows":
@@ -866,7 +708,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 209.0
+		"height": 202.0
 	},
 	"output.find_results":
 	{
@@ -880,7 +722,7 @@
 	"project": "AIProject.sublime-project",
 	"replace":
 	{
-		"height": 64.0
+		"height": 48.0
 	},
 	"save_all_on_build": true,
 	"select_file":

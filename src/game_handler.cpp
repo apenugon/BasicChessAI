@@ -17,6 +17,8 @@ GameHandler::~GameHandler() {
 void GameHandler::play_game() {
 	Player* current_player = One; //Start with white
 	// should be while game not over
+    std::cin.ignore();
+    std::cout << std::endl;
 	while (!chess_board->is_game_over()) {
 		chess_board->printBoardState();
 		auto move = current_player->get_move(chess_board);

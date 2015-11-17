@@ -1,8 +1,11 @@
 Akul
 Ted
-MOVE 2d 4d
-
-MOVE 7e 5e
-
-MOVE 4d 5e
+MOVE 2e 4e
+MOVE 7f 5f
+MOVE 2g 3g
+MOVE 8e 7f
+MOVE 3g 4g
+MOVE 5f 4e
+MOVE 1d 3f
+EXIT
 

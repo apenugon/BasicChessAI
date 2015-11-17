@@ -84,7 +84,6 @@ private:
  	void initHumanReadablePieces();
  	void initColCharToNum();
  	void newPiece(Piece::PlayerPiece player_piece, int row, int col, Teams team);
- 	void removePiece(int row, int col);
  	bool isInCheck(Teams team);
  	void generate_piece_moves();
  	void generate_moves();
