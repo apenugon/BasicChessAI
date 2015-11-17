@@ -4,12 +4,164 @@
 		"selected_items":
 		[
 			[
-				"current",
-				"current_team"
+				"is",
+				"isHumanP2"
+			],
+			[
+				"isH",
+				"isHumanP1"
+			],
+			[
+				"Chess",
+				"ChessBoard"
+			],
+			[
+				"My",
+				"myGameHandler"
+			],
+			[
+				"remo",
+				"removePiece"
+			],
+			[
+				"print",
+				"print_available_moves"
+			],
+			[
+				"mak",
+				"make_pair"
+			],
+			[
+				"castl",
+				"castle_row"
+			],
+			[
+				"get_",
+				"get_valid_moves"
+			],
+			[
+				"opp",
+				"opposing_pieces"
+			],
+			[
+				"PieceL",
+				"PieceListWhite"
 			],
 			[
 				"make",
-				"make_tuple"
+				"makeMove"
+			],
+			[
+				"run",
+				"runtime_error"
+			],
+			[
+				"re",
+				"runtime_error"
+			],
+			[
+				"team",
+				"team"
+			],
+			[
+				"chce",
+				"check_integrity"
+			],
+			[
+				"Piece",
+				"PieceListBlack"
+			],
+			[
+				"check",
+				"check_integrity"
+			],
+			[
+				"to",
+				"to_string"
+			],
+			[
+				"col",
+				"col_in_bounds"
+			],
+			[
+				"cur",
+				"current_team"
+			],
+			[
+				"next",
+				"nextboard"
+			],
+			[
+				"prin",
+				"print_available_moves"
+			],
+			[
+				"to_",
+				"to_row"
+			],
+			[
+				"from",
+				"from_col"
+			],
+			[
+				"newPi",
+				"newPieceListBlack"
+			],
+			[
+				"generate",
+				"generate_moves"
+			],
+			[
+				"get",
+				"get_player_piece"
+			],
+			[
+				"new",
+				"new_board_state"
+			],
+			[
+				"new_",
+				"new_pieceArray"
+			],
+			[
+				"has",
+				"has_moved"
+			],
+			[
+				"int",
+				"int"
+			],
+			[
+				"gener",
+				"generate_moves"
+			],
+			[
+				"filter",
+				"filter_function"
+			],
+			[
+				"bord",
+				"board_state"
+			],
+			[
+				"piece",
+				"PieceListBlack"
+			],
+			[
+				"ne",
+				"new_pieceArray"
+			],
+			[
+				"BO",
+				"BOARD_LENGTH"
+			],
+			[
+				"curr",
+				"current_piece_list"
+			],
+			[
+				"current",
+				"current_team"
 			],
 			[
 				"are",
@@ -28,16 +180,8 @@
 				"generate_valid_moves"
 			],
 			[
-				"Piece",
-				"PieceListBlack"
-			],
-			[
 				"valid",
 				"valid_moves"
-			],
-			[
-				"is",
-				"isInCheck"
 			],
 			[
 				"curre",
@@ -50,10 +194,6 @@
 			[
 				"er",
 				"EraseFun"
-			],
-			[
-				"piece",
-				"pieceArray"
 			],
 			[
 				"b",
@@ -74,10 +214,6 @@
 			[
 				"boar",
 				"board_state"
-			],
-			[
-				"col",
-				"col1Check"
 			]
 		]
 	},
@@ -87,15 +223,47 @@
 			"file": "src/header/chess_board.h",
 			"settings":
 			{
-				"buffer_size": 1919,
+				"buffer_size": 2568,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/header/piece.h",
+			"file": "src/header/game_handler.h",
 			"settings":
 			{
-				"buffer_size": 1159,
+				"buffer_size": 203,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/game_handler.cpp",
+			"settings":
+			{
+				"buffer_size": 818,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/header/human_player.h",
+			"settings":
+			{
+				"buffer_size": 252,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/human_player.cpp",
+			"settings":
+			{
+				"buffer_size": 1958,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/header/player.h",
+			"settings":
+			{
+				"buffer_size": 233,
 				"line_ending": "Unix"
 			}
 		},
@@ -103,34 +271,7 @@
 			"file": "src/main.cpp",
 			"settings":
 			{
-				"buffer_size": 505,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "#include \"chess_board.h\"\n\nusing namespace std;\n\nvoid ChessBoard::initColCharToNum() {\n	colCharToNum['a'] = 0;\n	colCharToNum['b'] = 1;\n	colCharToNum['c'] = 2;\n	colCharToNum['d'] = 3;\n	colCharToNum['e'] = 4;\n	colCharToNum['f'] = 5;\n	colCharToNum['g'] = 6;\n	colCharToNum['h'] = 7;\n}\n\nbool ChessBoard::isInCheck() {\n	bool isInCheck = false;\n	// Find king\n	if (this->current_team == WHITE)\n		for (auto p : PieceListBlack) {\n			isInCheck |= p->threatens_king();\n		}\n	else\n		for (auto p : PieceListWhite) {\n			isInCheck |= p->threatens_king();\n		}\n	return isInCheck;\n	// Check to see if you run into pieces in any direction, \n}\n\nbool ChessBoard::is_move_valid\n\n/* Return codes - \n-2 - Can't make that move while King is in check\n-1 - to is not valid\n0 - There is no piece at from\n1 - ok move \n3 - ok, a king is now in check \n4 - ok, player that moved has won\n*/\nChessBoard* ChessBoard::makeMove(MoveType move_type, std::pair<int,int> from, std::pair<int,int> to, bool is_valid) {\n\n	// Validate move\n	if (!is_valid) {\n		for (auto m : valid_moves) {\n			auto mt = std::get<0>(m);\n			auto mfrom = std::get<1>(m);\n			auto mto = std::get<2>(m);\n			if (mt == move_type &&\n				std::get<0>(mfrom) == std::get<0>(from) && std::get<1>(mfrom) == std::get<1>(from) &&\n				std::get<0>(mto) == std::get<0>(to) && std::get<1>(mto) == std::get<1>(to) ) {\n				is_valid = true;\n			}\n		}\n\n		if (!is_valid)\n			return -1;\n	}\n\n	// Construct a new board\n\n	auto next_team = current_team == WHITE ? BLACK : WHITE;\n\n\n\n	return new ChessBoard();\n}\n\nvoid ChessBoard::newPiece(Piece::PlayerPiece player_piece, int row, int col, Teams team) {\n	board_state[row][col] = player_piece;\n	pieceArray[row][col] = new Piece(player_piece, row, col);\n	if (team == WHITE)\n		PieceListWhite.push_back(pieceArray[row][col]);\n	else\n		PieceListBlack.push_back(pieceArray[row][col]);\n}\n\nvoid ChessBoard::removePiece(int row, int col) {\n	Teams team = (Teams)pieceArray[row][col]->get_team();\n	board_state[row][col] = Piece::Types::NONE;\n	auto EraseFun = [row, col](Piece* this_piece) \n				{\n					auto coords = this_piece->get_coords(); \n					return std::get<0>(coords) == row \n							&& std::get<1>(coords) == col;\n				};\n	if (team == WHITE) {\n		PieceListWhite.erase(\n			std::remove_if(\n				PieceListWhite.begin(), \n				PieceListWhite.end(), \n				EraseFun),\n			PieceListWhite.end());\n	} else {\n		PieceListBlack.erase(\n			std::remove_if(\n				PieceListBlack.begin(), \n				PieceListBlack.end(), \n				EraseFun),\n			PieceListBlack.end());\n	}\n	delete pieceArray[row][col];\n}\n\nvoid ChessBoard::placePieces() {\n	// Add pieces to the chess board\n	// Note: White starts up top, Black starts on the buttom\n\n	// First add White pieces\n	// King is first\n	newPiece(Piece::WHITE_KING, BORDER_DEPTH, BORDER_DEPTH + CHESS_PLAY_LENGTH-4, WHITE);\n\n	// White Pawns:\n	for (int i = 0; i < CHESS_PLAY_LENGTH; i++) {\n		newPiece(Piece::WHITE_PAWN, 1+BORDER_DEPTH, i+BORDER_DEPTH, WHITE);\n	}\n\n	//White Rooks\n	newPiece(Piece::WHITE_ROOK, BORDER_DEPTH, BORDER_DEPTH, WHITE);\n	newPiece(Piece::WHITE_ROOK, BORDER_DEPTH, BORDER_DEPTH + CHESS_PLAY_LENGTH-1, WHITE);\n	//White Knights\n	newPiece(Piece::WHITE_KNIGHT, BORDER_DEPTH, BORDER_DEPTH+1, WHITE);\n	newPiece(Piece::WHITE_KNIGHT, BORDER_DEPTH, BORDER_DEPTH + CHESS_PLAY_LENGTH-2, WHITE);\n\n	//White Bishops\n	newPiece(Piece::WHITE_BISHOP, BORDER_DEPTH, BORDER_DEPTH+2, WHITE);\n	newPiece(Piece::WHITE_BISHOP, BORDER_DEPTH, BORDER_DEPTH + CHESS_PLAY_LENGTH-3, WHITE);\n\n	//White King\n	newPiece(Piece::WHITE_QUEEN, BORDER_DEPTH, BORDER_DEPTH+3, WHITE);\n	//White Queen\n\n	//Now add Black pieces\n\n	// King is first, at front of vector\n	newPiece(Piece::BLACK_KING, BOARD_LENGTH-BORDER_DEPTH-1, BORDER_DEPTH + CHESS_PLAY_LENGTH-4, BLACK);\n\n	// Black Pawns:\n	for (int i = 0; i < CHESS_PLAY_LENGTH; i++) {\n		newPiece(Piece::BLACK_PAWN, BOARD_LENGTH-BORDER_DEPTH-2, i+BORDER_DEPTH, BLACK);\n	}\n\n	//Black Rooks\n	newPiece(Piece::BLACK_ROOK, BOARD_LENGTH-BORDER_DEPTH-1, BORDER_DEPTH, BLACK);\n	newPiece(Piece::BLACK_ROOK, BOARD_LENGTH-BORDER_DEPTH-1, BORDER_DEPTH + CHESS_PLAY_LENGTH-1, BLACK);\n	//Black Knights\n	newPiece(Piece::BLACK_KNIGHT, BOARD_LENGTH-BORDER_DEPTH-1, BORDER_DEPTH+1, BLACK);\n	newPiece(Piece::BLACK_KNIGHT, BOARD_LENGTH-BORDER_DEPTH-1, BORDER_DEPTH + CHESS_PLAY_LENGTH-2, BLACK);\n\n	//Black Bishops\n	newPiece(Piece::BLACK_BISHOP, BOARD_LENGTH-BORDER_DEPTH-1, BORDER_DEPTH+2, BLACK);\n	newPiece(Piece::BLACK_BISHOP, BOARD_LENGTH-BORDER_DEPTH-1, BORDER_DEPTH + CHESS_PLAY_LENGTH-3, BLACK);\n\n	//Black King\n	newPiece(Piece::BLACK_QUEEN, BOARD_LENGTH-BORDER_DEPTH-1, BORDER_DEPTH+3, BLACK);\n	//Black Queen\n\n	// Generate opposing pieces' moves.\n	for (auto p : PieceListBlack) {\n		p->generate_valid_moves(board_state);\n	}\n	for (auto p : PieceListWhite) {\n		p->generate_valid_moves(board_state);\n	}\n\n\n}\n\nvoid ChessBoard::generate_moves() {\n	// Only generate moves for the current team\n	std::vector<Piece*>* useVector = this->current_team == WHITE ? &PieceListWhite : &PieceListBlack;\n	int castle_row = this->current_team == WHITE ? BORDER_DEPTH : BOARD_LENGTH - BORDER_DEPTH - 1;\n\n	// Note - if in check, only the king counts. Otherwise, everything does\n	if (isInCheck()) {\n		auto king = useVector->front();\n		for (auto move : king->get_valid_moves()) {\n			auto move_tuple = std::make_tuple(MOVE, king->get_coords(), move);\n			valid_moves.push_back(move_tuple);\n		}\n	} else {\n		// Generate move sets for each piece, add them to the actual valid move list\n		for (std::vector<Piece*>::iterator p = useVector->begin(); p < useVector->end(); ++p) {\n			(*p)->generate_valid_moves(board_state);\n			for (auto move : (*p)->get_valid_moves()) {\n				auto move_tuple = std::make_tuple(MOVE, (*p)->get_coords(), move);\n				valid_moves.push_back(move_tuple);\n			}\n		}\n	}\n\n	// Add in Castling moves\n	// 6 different conditions\n\n	auto king = useVector->front();\n    \n	// Check if king was moved and King not in check\n	if (!isInCheck() && king->get_has_moved() == false) {\n		// Rook Left\n		auto rook = pieceArray[a][castle_row];\n		if (rook != NULL && \n			rook ->get_has_moved() == false &&\n			rook->typeOf() == Piece::Types::ROOK) {\n			// Check if the intervening spaces are free\n			bool areFree = true;\n			for (int i = std::get<1>(king->get_coords()) - 1; i > a; i--) {\n				if (board_state[a][b] != Piece::Types::NONE) {\n					areFree = false;\n				}\n			}\n			if (areFree) {\n				auto move = std::make_tuple(CASTLE, king->get_coords(), rook->get_coords());\n				valid_moves.push_back(move);\n			}\n		}\n		// Rook Right\n		rook = pieceArray[h][castle_row];\n		if (rook != NULL && \n			rook ->get_has_moved() == false &&\n			rook->typeOf() == Piece::Types::ROOK) {\n			// Check if the intervening spaces are free\n			bool areFree = true;\n			for (int i = std::get<1>(king->get_coords()) - 1; i < h; i++) {\n				if (board_state[a][b] != Piece::Types::NONE) {\n					areFree = false;\n				}\n			}\n			if (areFree) {\n				auto move = std::make_tuple(CASTLE, king->get_coords(), rook->get_coords());\n				valid_moves.push_back(move);\n			}\n		}\n\n	}\n\n	// Rook 1:\n	// Was the rook moved?\n\n	//Are there pieces in between?\n\n	auto filter_function = [] () {\n		// Make move, determine if king in check\n\n	}\n\n	// Now filter all moves bahttp://preshing.com/20110811/xkcd-password-generator/sed on whether or not the king is in check afterwards (probably the most computationally intensive)\n}\n\n// Creates a new chessboard, set up with the next board state.\nChessBoard::ChessBoard(int board_state[][BOARD_LENGTH], \n	std::vector<Piece*> PieceListWhite, \n	std::vector<Piece*> PieceListBlack, \n	Piece* pieceArray[][BOARD_LENGTH]) {\n	initColCharToNum();\n\n	this->PieceListWhite = PieceListWhite;\n	this->PieceListBlack = PieceListBlack;\n	for (int i = 0; i < BOARD_LENGTH; i++) {\n		for (int j = 0; j < BOARD_LENGTH; j++) {\n			this->board_state[i][j] = board_state[i][j];\n			this->pieceArray[i][j] = pieceArray[i][j];\n		}\n	}\n\n}\n\n// Creates a _new_ chessboard, set up with a standard chess start\nChessBoard::ChessBoard() {\n	// Initialize the map colCharToNum\n	initColCharToNum();\n	// First zero out the board (Or set to be invalid)\n	for (int i = 0; i < BOARD_LENGTH; i++) {\n		for (int j = 0; j < BOARD_LENGTH; j++) {\n			// Mark regions that are out of bounds as such\n			if (i < BORDER_DEPTH || \n				j < BORDER_DEPTH || \n				i >= BOARD_LENGTH - BORDER_DEPTH || \n				j >= BOARD_LENGTH - BORDER_DEPTH)\n				board_state[i][j]=Piece::Types::INVALID;\n			else\n				board_state[i][j]=Piece::Types::NONE;\n			pieceArray[i][j] = NULL;\n		}\n	}\n	// Place pieces on chess board\n	placePieces();\n	generate_moves();\n	this->current_team = WHITE;\n}\n\nChessBoard::~ChessBoard() {\n	for (int i = 0; i < BOARD_LENGTH; i++) {\n		for (int j = 0; j < BOARD_LENGTH; j++) {\n			if (pieceArray[i][j] != NULL)\n				delete pieceArray[i][j];\n		}\n	}\n}\n\nvoid ChessBoard::printBoardState() {\n	cout << \"  ----------------------- \" << endl;\n	for (int i = BOARD_LENGTH-BORDER_DEPTH-1; i >= BORDER_DEPTH; i--) {\n		cout << i-1 << \"|\";\n		for (int j = BORDER_DEPTH; j < BOARD_LENGTH-BORDER_DEPTH; j++) {\n			char neg = board_state[i][j] < 0 ? 'W' : board_state[i][j] > 0 ? 'B' : ' ';\n			cout << neg << humanReadablePieces[abs(board_state[i][j])] << \"|\";\n		}\n		cout << endl;\n	}\n	cout << \"  ----------------------- \" << endl;\n	cout << \"   a  b  c  d  e  f  g  h \" << endl << endl;\n}\n",
-			"file": "src/chess_board.cpp",
-			"file_size": 9187,
-			"file_write_time": 130920570770736887,
-			"settings":
-			{
-				"buffer_size": 9219,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Makefile",
-			"settings":
-			{
-				"buffer_size": 533,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "README.md",
-			"settings":
-			{
-				"buffer_size": 253,
+				"buffer_size": 1432,
 				"line_ending": "Unix"
 			}
 		},
@@ -138,19 +279,16 @@
 			"file": "src/piece.cpp",
 			"settings":
 			{
-				"buffer_size": 4080,
+				"buffer_size": 5739,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "diff --git a/src/piece.cpp b/src/piece.cpp\nindex 6fb75cd..8bc34b1 100644\n--- a/src/piece.cpp\n+++ b/src/piece.cpp\n@@ -1,17 +1,23 @@\n #include \"piece.h\"\n-#define CAN_PLACE_PIECE(a,b) (board_state[a][b] * team < 0 && board_state[a][b] != Types::INVALID)\n+#define CAN_PLACE_PIECE(a,b) (board_state[a][b] * team <= 0 && board_state[a][b] != Types::INVALID)\n #define ADD_MOVE(list, a, b) if (CAN_PLACE_PIECE(a,b)) list.push_back(std::make_pair(a,b));\n \n // All COORDS here are in real coords (1-12)\n \n-Piece::Piece(PlayerPiece player_piece, int inRow, int inCol, int** board_state) {\n+Piece::Piece(PlayerPiece in_player_piece, int inRow, int inCol, int board_state[][BOARD_LENGTH]) {\n+	player_piece = in_player_piece;\n 	row = inRow;\n 	col = inCol;\n 	team = player_piece < 0 ? 1 : -1;\n 	generate_valid_moves(board_state);\n }\n \n-Piece::Piece(PlayerPiece player_piece, int inRow, int inCol) {\n+int Piece::get_team() {\n+	return team;\n+}\n+\n+Piece::Piece(PlayerPiece in_player_piece, int inRow, int inCol) {\n+	player_piece = in_player_piece;\n 	row = inRow;\n 	col = inCol;\n 	team = player_piece < 0 ? 1 : -1;\n@@ -21,7 +27,7 @@ std::pair<int,int> Piece::get_coords() {\n 	return std::make_pair(row, col);\n }\n \n-void Piece::move(int inRow, int inCol, int** board_state) {\n+void Piece::move(int inRow, int inCol, int board_state[][BOARD_LENGTH]) {\n 	row = inRow;\n 	col = inCol;\n 	generate_valid_moves(board_state);\n@@ -35,12 +41,21 @@ std::vector<std::pair<int,int>> Piece::get_valid_moves() {\n 	return valid_moves;\n }\n \n-void Piece::generate_valid_moves(int** board_state) {\n+void Piece::generate_valid_moves(int board_state[][BOARD_LENGTH]) {\n 	int i;\n-	switch (typeOf()) {\n+	Types type = typeOf();\n+	switch (type) {\n 		case PAWN:\n+			// Can only move if no piece\n+			if (board_state[row+1 * team, col] == Types::EMPTY)\n 			ADD_MOVE(valid_moves, row + 1 * team, col);\n+			if (board_state[row+1 * team, col] == Types::EMPTY)\n 			ADD_MOVE(valid_moves, row + 2 * team, col);\n+			// Can attack diagonally, if there is a piece present\n+			if (board_state[row+1*team, col+1] * team < 0 && board_state[a][b] != Types::INVALID)\n+				ADD_MOVE(valid_moves, row + 1 * team, col + 1);\n+			if (board_state[row+1*team, col-1] * team < 0 && board_state[a][b] != Types::INVALID)\n+				ADD_MOVE(valid_moves, row + 1 * team, col - 1);\n 			break;\n 		case QUEEN:\n 		case ROOK:\n@@ -117,6 +132,8 @@ void Piece::generate_valid_moves(int** board_state) {\n 			ADD_MOVE(valid_moves, row + 1, col-1);\n 			ADD_MOVE(valid_moves, row + 1, col);\n 			break;\n+		default:\n+			break;\n 	}\n }\n \n",
+			"file": "src/chess_board.cpp",
 			"settings":
 			{
-				"buffer_size": 2542,
-				"line_ending": "Unix",
-				"name": "Git Diff",
-				"read_only": true,
-				"scratch": true
+				"buffer_size": 15714,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -241,7 +379,7 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 117.0,
+		"height": 359.0,
 		"last_filter": "push",
 		"selected_items":
 		[
@@ -256,6 +394,14 @@
 			[
 				"add",
 				"Git: Add..."
+			],
+			[
+				"commit",
+				"Git: Commit"
+			],
+			[
+				"command",
+				"Git: Custom Command"
 			],
 			[
 				"status",
@@ -333,13 +479,16 @@
 	],
 	"file_history":
 	[
-		"/home/akul/Documents/HKU/AI/Project/AIProject.sublime-project",
-		"/home/akul/Documents/HKU/AI/Project/src/main.cpp",
 		"/home/akul/Documents/HKU/AI/Project/Makefile",
+		"/home/akul/Documents/HKU/AI/Project/src/header/piece.h",
 		"/home/akul/Documents/HKU/AI/Project/.gitignore",
+		"/home/akul/Documents/HKU/AI/Project/src/piece.cpp",
+		"/home/akul/Documents/HKU/AI/Project/README.md",
+		"/home/akul/Documents/HKU/AI/Project/src/main.cpp",
+		"/home/akul/Documents/HKU/AI/Project/valgrind.log",
+		"/home/akul/Documents/HKU/AI/Project/AIProject.sublime-project",
 		"/home/akul/Documents/HKU/AI/Project/src/chess_board.cpp",
 		"/home/akul/Documents/HKU/AI/Project/AIProject",
-		"/home/akul/Documents/HKU/AI/Project/README.md",
 		"/home/akul/Documents/HKU/AI/Project/src/header/pieces.h",
 		"/home/akul/Documents/HKU/AI/Project/AIProj.sublime-build",
 		"/home/akul/.config/sublime-text-3/Packages/User/AIProj.sublime-build",
@@ -362,6 +511,23 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"delete",
+			"check_in",
+			"CASTLE",
+			"check_integrity",
+			"team",
+			"newPiece",
+			"itoa",
+			"generate_moves",
+			"print_",
+			"filter",
+			"makeMove",
+			"make_move",
+			"generate_piece_moves",
+			"generate_piece",
+			"generate_valid_moves",
+			"ADD_MOVE(valid_moves, ",
+			"isInCheck",
 			"pragma",
 			"generate",
 			"EMPTY",
@@ -379,10 +545,13 @@
 		],
 		"highlight": true,
 		"in_selection": false,
-		"preserve_case": true,
-		"regex": false,
+		"preserve_case": false,
+		"regex": true,
 		"replace_history":
 		[
+			"move_factor",
+			"std::to_string",
+			"add_move(",
 			"NONE",
 			"Black",
 			"Piece::",
@@ -397,12 +566,12 @@
 		"show_context": true,
 		"use_buffer2": true,
 		"whole_word": false,
-		"wrap": false
+		"wrap": true
 	},
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -411,15 +580,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1919,
+						"buffer_size": 2568,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								887,
-								887
+								1247,
+								1247
 							]
 						],
 						"settings":
@@ -427,36 +596,35 @@
 							"syntax": "Packages/C++/C++.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 578.0,
+						"translation.y": 357.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "src/header/piece.h",
+					"file": "src/header/game_handler.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1159,
+						"buffer_size": 203,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								25,
+								25
 							]
 						],
 						"settings":
 						{
-							"auto_name": "",
 							"syntax": "Packages/C++/C++.tmLanguage"
 						},
-						"translation.x": -0.0,
-						"translation.y": 153.0,
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
@@ -464,125 +632,153 @@
 				},
 				{
 					"buffer": 2,
-					"file": "src/main.cpp",
+					"file": "src/game_handler.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 505,
+						"buffer_size": 818,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								63,
-								63
+								686,
+								686
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/C++/C++.tmLanguage"
 						},
-						"translation.x": 0.0,
-						"translation.y": 51.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/chess_board.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 9219,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								652,
-								652
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 357.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "Makefile",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 533,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								151,
-								151
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Makefile/Makefile.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.x": -0.0,
+						"translation.y": 153.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "README.md",
+					"buffer": 3,
+					"file": "src/header/human_player.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 253,
+						"buffer_size": 252,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								124,
-								124
+								18,
+								18
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Markdown/Markdown.tmLanguage"
+							"syntax": "Packages/C++/C++.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/human_player.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1958,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								674,
+								674
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 306.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/header/player.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 233,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								233,
+								233
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
 					"buffer": 6,
+					"file": "src/main.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1432,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								206,
+								206
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 102.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
 					"file": "src/piece.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4080,
+						"buffer_size": 5739,
 						"regions":
 						{
 						},
@@ -595,40 +791,43 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage"
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2941.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 8,
+					"file": "src/chess_board.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2542,
+						"buffer_size": 15714,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2542,
-								2542
+								13641,
+								13641
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Diff/Diff.tmLanguage"
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.x": 24.0,
+						"translation.y": 6025.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 5,
 					"type": "text"
 				}
 			]
@@ -667,7 +866,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 191.0
+		"height": 209.0
 	},
 	"output.find_results":
 	{

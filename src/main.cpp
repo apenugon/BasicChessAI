@@ -30,6 +30,7 @@ int main() {
 	myboard->print_available_moves();
 	myboard->check_integrity();
 	ChessBoard* nextboard = myboard->makeMove(ChessBoard::MOVE, std::make_pair(3, 4), std::make_pair(4, 4));
+	delete myboard;
 	//Should now be Black's turn
 	nextboard->check_integrity();
 	nextboard->printBoardState();
@@ -43,7 +44,6 @@ int main() {
 	WhiteMove->print_available_moves();
 	delete blackMove;
 	delete nextboard;
-	delete myboard;
 	//delete nextboard;
 	return 0;
 }

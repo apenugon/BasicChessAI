@@ -21,12 +21,18 @@ void GameHandler::play_game() {
 		chess_board->printBoardState();
 		auto move = current_player->get_move(chess_board);
 		ChessBoard* next_board = chess_board->makeMove(move);
+		#ifdef DEBUG
+		chess_board->check_integrity();
+		#endif
 		if (next_board == NULL) {
-			std::cout << "Invalid Move" << std::endl;
+			std::cout << "Invalid Move - type MOVES to see all possible moves" << std::endl;
 		} else {
 			delete chess_board;
 			chess_board = next_board;
 			current_player = current_player == One ? Two : One;
+			#ifdef DEBUG
+			chess_board->check_integrity();
+			#endif
 		}
 	}
 }

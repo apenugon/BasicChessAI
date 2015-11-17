@@ -17,10 +17,12 @@ HumanPlayer::~HumanPlayer() {
 }
 
 std::tuple<ChessBoard::MoveType, std::string, std::string> HumanPlayer::get_move(ChessBoard* board) {
+
+	std::cin.ignore();
 	while (1) {
 		std::cout << name << "@ChessGame> ";
 		std::string input;
-		std::cin >> input;
+		std::getline(std::cin, input);
 		std::cout << std::endl;
 
 		std::stringstream stream(input);
