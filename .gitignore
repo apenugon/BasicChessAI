@@ -1,3 +1,5 @@
 AIProject
 obj/*
+profile/*
+gmon.out
 valgrind.log

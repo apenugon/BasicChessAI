@@ -4,8 +4,11 @@ DIR=$(shell pwd)
 OBJDIR=$(DIR)/obj
 SRCDIR=$(DIR)/src
 HEADERDIR=$(SRCDIR)/header
-CFLAGS=-std=c++11 -I$(HEADERDIR) -fopenmp
-LDFLAGS= -fopenmp
+PROFILEDIR=$(DIR)/profile
+CFLAGS_BASE=-std=c++11 -I$(HEADERDIR) -march=native -fopenmp -fprofile-dir=$(PROFILEDIR)
+CFLAGS=$(CFLAGS_BASE)
+LDFLAGS_BASE= -fopenmp
+LDFLAGS = $(LDFLAGS_BASE)
 
 _DEPS=chess_board.h piece.h game_handler.h player.h human_player.h
 DEPS=$(patsubst %,$(HEADERDIR)/%,$(_DEPS))
@@ -15,6 +18,15 @@ OBJS=$(patsubst %,$(OBJDIR)/%, $(_OBJS))
 
 default: CFLAGS += -O3
 default: main
+
+
+profile: CFLAGS += -O3 -pg -fprofile-generate
+profile: LDFLAGS += -pg -fprofile-generate
+profile: main
+
+optbin: $(shell rm -f $(OBJDIR)/*.o)
+optbin: CFLAGS += -O3 -fprofile-use -fprofile-correction
+optbin: main
 
 debug: CFLAGS += -D DEBUG -g -Wall
 debug: main
@@ -27,4 +39,4 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPS)
 
 
 clean: 
-	rm -f $(OBJDIR)/*
+	rm -f $(OBJDIR)/* $(PROFILEDIR)/* gmon.out
