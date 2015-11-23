@@ -27,7 +27,7 @@ optbin: $(shell rm -f $(OBJDIR)/*.o)
 optbin: CFLAGS += -O3 -fprofile-use -fprofile-correction
 optbin: main
 
-debug: CFLAGS += -D DEBUG -g -Wall
+debug: CFLAGS += -D DEBUG -g -Wall -O0
 debug: main
 
 main: $(OBJS)

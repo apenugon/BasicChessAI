@@ -26,7 +26,7 @@ void ChessBoard::print_available_moves() {
 		int from_col = std::get<1>(from);
 		int to_row = std::get<0>(to);
 		int to_col = std::get<1>(to);
-		std::cout << move << " " << from_row-BORDER_DEPTH+1 << colNumToChar[from_col-BORDER_DEPTH] << " " << to_row-BORDER_DEPTH+1 << colNumToChar[to_col-BORDER_DEPTH] << std::endl;
+		std::cout << move << " " << colNumToChar[from_col-BORDER_DEPTH]  << from_row-BORDER_DEPTH+1 << " " << colNumToChar[to_col-BORDER_DEPTH] << to_row-BORDER_DEPTH+1 << std::endl;
 	}
 #ifdef DEBUG
     std::cout << "Pieces Present:" << std::endl;
@@ -77,8 +77,8 @@ ChessBoard* ChessBoard::makeMove(std::tuple<MoveType, std::pair<int,int>, std::p
 }
 
 ChessBoard* ChessBoard::makeMove(MoveType move_type, std::string from, std::string to) {
-	std::pair<int,int> from_pair = std::make_pair(from.at(0) - '0' + BORDER_DEPTH - 1, colCharToNum[from.at(1)]+BORDER_DEPTH);
-	std::pair<int,int> to_pair = std::make_pair(to.at(0) - '0' + BORDER_DEPTH - 1, colCharToNum[to.at(1)]+BORDER_DEPTH);
+	std::pair<int,int> from_pair = std::make_pair(from.at(1) - '0' + BORDER_DEPTH - 1, colCharToNum[from.at(0)]+BORDER_DEPTH);
+	std::pair<int,int> to_pair = std::make_pair(to.at(1) - '0' + BORDER_DEPTH - 1, colCharToNum[to.at(0)]+BORDER_DEPTH);
 #ifdef DEBUG
     std::cout << "Making given move: (" << std::get<0>(from_pair) << "," << std::get<1>(from_pair) << "),(";
     std::cout << std::get<0>(to_pair) << "," << std::get<1>(to_pair) << ")" << std::endl;
