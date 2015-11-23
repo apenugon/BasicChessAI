@@ -4,8 +4,7 @@ DIR=$(shell pwd)
 OBJDIR=$(DIR)/obj
 SRCDIR=$(DIR)/src
 HEADERDIR=$(SRCDIR)/header
-PROFILEDIR=$(DIR)/profile
-CFLAGS_BASE=-std=c++11 -I$(HEADERDIR) -march=native -fopenmp -fprofile-dir=$(PROFILEDIR)
+CFLAGS_BASE=-std=c++11 -I$(HEADERDIR) -march=native -fopenmp
 CFLAGS=$(CFLAGS_BASE)
 LDFLAGS_BASE= -fopenmp
 LDFLAGS = $(LDFLAGS_BASE)
@@ -39,4 +38,4 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPS)
 
 
 clean: 
-	rm -f $(OBJDIR)/* $(PROFILEDIR)/* gmon.out
+	rm -rf $(OBJDIR)/* gmon.out AIProject
