@@ -13,7 +13,28 @@ void ChessBoard::initColCharToNum() {
 	colCharToNum['h'] = 7;
 }
 
+std::vector<std::tuple<ChessBoard::MoveType,std::pair<int,int>, std::pair<int,int>>> ChessBoard::get_valid_moves() {
+    return this->valid_moves;
+}
 
+int ChessBoard::num_available_moves() {
+    return valid_moves.size();
+}
+
+ChessBoard::Teams ChessBoard::get_team() {
+    return current_team;
+}
+
+ChessBoard::Teams ChessBoard::get_opposing_team() {
+    return current_team == WHITE ? BLACK : WHITE;
+}
+
+std::vector<Piece*> ChessBoard::getPieceList(ChessBoard::Teams team) {
+    if (team == WHITE)
+        return this->PieceListWhite;
+    else
+        return this->PieceListBlack;
+}
 
 void ChessBoard::print_available_moves() {
 	std::string team = current_team == WHITE ? "WHITE" : "BLACK";
@@ -44,12 +65,12 @@ bool ChessBoard::isInCheck(Teams team) {
 	bool isInCheck = false;
 	// Find king
 	if (team == WHITE)
-		for (auto p : PieceListBlack) {
-			isInCheck |= p->threatens_king();
+		for (int i = 0; i < PieceListBlack.size(); i++) {
+			isInCheck |= (PieceListBlack[i])->threatens_king();
 		}
 	else
-		for (auto p : PieceListWhite) {
-			isInCheck |= p->threatens_king();
+		for (int i = 0; i <  PieceListWhite.size(); i++) {
+			isInCheck |= (PieceListWhite[i])->threatens_king();
 		}
 	return isInCheck;
 	// Check to see if you run into pieces in any direction, 
@@ -95,9 +116,8 @@ ChessBoard* ChessBoard::makeMove(MoveType move_type, std::pair<int,int> from, st
 	if (!is_valid) {
 		if (!in_bounds(from) || !in_bounds(to))
         	return NULL;
-		for (auto m : valid_moves) {
-			if (m == move)
-				is_valid = true;
+		for (int i = 0; i < valid_moves.size(); i++) {
+			is_valid |= valid_moves[i] == move;
 		}
 
 		if (!is_valid)
@@ -243,13 +263,15 @@ void ChessBoard::placePieces() {
 void ChessBoard::generate_piece_moves() {
     // First check if there are any pieces to be promoted, then
 	// Generate opposing pieces' moves.
-	for (auto p : PieceListBlack) {
+	for (int i = 0; i < PieceListBlack.size(); i++) {
+        auto p = PieceListBlack[i];
         if (p->promote()) {
             board_state[std::get<0>(p->get_coords())][std::get<1>(p->get_coords())] = (int)(p->get_player_piece());
         }
 		p->generate_valid_moves(board_state);
 	}
-	for (auto p : PieceListWhite) {
+	for (int i = 0; i < PieceListWhite.size(); i++) {
+        auto p = PieceListWhite[i];
         if (p->promote()) {
             board_state[std::get<0>(p->get_coords())][std::get<1>(p->get_coords())] = (int)(p->get_player_piece());
         }
@@ -282,14 +304,20 @@ void ChessBoard::generate_moves() {
 		}
 	}
 
+    std::vector<std::tuple<MoveType, std::pair<int,int>, std::pair<int,int>>>local_valid_moves;
 
+
+    #pragma omp declare reduction (merge : std::vector<std::tuple<MoveType, std::pair<int,int>, std::pair<int,int>>> : omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end())) 
 	// Generate move sets for each piece, add them to the actual valid move list
+    #pragma omp parallel for reduction(merge : local_valid_moves)
 	for (std::vector<Piece*>::iterator p = useVector->begin(); p < useVector->end(); ++p) {
 		for (auto move : (*p)->get_valid_moves()) {
 			auto move_tuple = std::make_tuple(MOVE, (*p)->get_coords(), move);
-			valid_moves.push_back(move_tuple);
+			local_valid_moves.push_back(move_tuple);
 		}
 	}
+
+    this->valid_moves = local_valid_moves;
 
     // Generate En Passent moves
     for (auto p : (*useVector)) {
@@ -385,8 +413,20 @@ void ChessBoard::generate_moves() {
 		return is_invalid_move;
 	};
 
+    std::vector<std::tuple<MoveType, std::pair<int,int>, std::pair<int,int>>> surviving_moves;
+
+    #pragma omp parallel for reduction(merge : surviving_moves)
+    for (int i = 0; i < valid_moves.size(); i++) {
+        auto m = valid_moves[i];
+        if (!filter_function(m)) {
+            surviving_moves.push_back(m);
+        }
+    }
+
+    this->valid_moves = surviving_moves;
+
     // Filters the moves by whether or not the king is present
-	valid_moves.erase(std::remove_if(valid_moves.begin(), valid_moves.end(), filter_function), valid_moves.end());
+	//valid_moves.erase(std::remove_if(valid_moves.begin(), valid_moves.end(), filter_function), valid_moves.end());
 }
 
 // Creates a new chessboard, set up with the next board state.

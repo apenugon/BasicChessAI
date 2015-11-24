@@ -2,9 +2,9 @@
 
 GameHandler::GameHandler(bool isHumanP1, bool isHumanP2) {
 	if (isHumanP1)
-		this->One = new HumanPlayer("white");
+		this->One = new HumanPlayer("WHITE");
 	if (isHumanP2)
-		this->Two = new HumanPlayer("black");
+		this->Two = new AIPlayer("BLACK");
 	this->chess_board = new ChessBoard();
 }
 

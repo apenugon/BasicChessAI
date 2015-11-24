@@ -58,6 +58,13 @@ public:
  	void print_available_moves();
  	void check_integrity();
  	bool is_game_over();
+    int num_available_moves();
+    std::vector<std::tuple<MoveType, std::pair<int,int>,std::pair<int,int>>> get_valid_moves();
+    ChessBoard::Teams get_team();
+    ChessBoard::Teams get_opposing_team();
+    std::vector<Piece*> getPieceList(ChessBoard::Teams team);
+    bool square_in_danger(int row, int col);
+    bool isInCheck(Teams team);
 private:
  	// In our definition for the board, the actual 
  	// board is within the range 2-10. So we have an 8x8
@@ -83,8 +90,7 @@ private:
 
  	void initHumanReadablePieces();
  	void initColCharToNum();
- 	void newPiece(Piece::PlayerPiece player_piece, int row, int col, Teams team);
- 	bool isInCheck(Teams team);
+ 	void newPiece(Piece::PlayerPiece player_piece, int row, int col, Teams team);	
  	void generate_piece_moves();
  	void generate_moves();
  	void placePieces();
@@ -93,5 +99,4 @@ private:
 				int toCol, 
 				int new_board_state[][BOARD_LENGTH], 
 				Piece* new_pieceArray[][BOARD_LENGTH]);
- 	bool square_in_danger(int row, int col);
 };

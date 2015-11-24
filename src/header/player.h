@@ -1,3 +1,6 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
 #include <tuple>
 #include <algorithm>
 #include <string>
@@ -10,3 +13,5 @@ public:
 
 	}
 };
+
+#endif

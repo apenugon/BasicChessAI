@@ -1,4 +1,5 @@
 #include "human_player.h"
+#include "ai_player.h"
 
 class GameHandler {
 public:
