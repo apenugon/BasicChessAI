@@ -37,8 +37,9 @@ std::tuple<ChessBoard::MoveType, std::string, std::string> HumanPlayer::get_move
 		std::string command = tokens[0];
 
 		if (command.compare("MOVE") == 0) {
-            if (tokens.size() < 3) {
-                std::cout << "You need to provide the move location!" << std:: endl;
+            if (tokens.size() < 3 || tokens[1].length() != 2 ||
+                    tokens[2].length() != 2) {
+                std::cout << "Improper Coordinates Specified" << std:: endl;
                 continue;
             }
 			return std::make_tuple(ChessBoard::MOVE, tokens[1], tokens[2]);

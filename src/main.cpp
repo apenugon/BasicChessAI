@@ -17,6 +17,12 @@ int main() {
 		myGameHandler = new GameHandler(true, true);
 		myGameHandler->play_game();
 		delete myGameHandler;
+        std::cout << "The last player won! New game? (y/n)";
+        char d;
+        std::cin >> d;
+        if (d == 'n') {
+            break;
+        }
 	}
 
     return 0;
