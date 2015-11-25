@@ -3,8 +3,12 @@
 GameHandler::GameHandler(bool isHumanP1, bool isHumanP2) {
 	if (isHumanP1)
 		this->One = new HumanPlayer("WHITE");
+    else
+        this->One = new AIPlayer("WHITE");
 	if (isHumanP2)
-		this->Two = new AIPlayer("BLACK");
+		this->Two = new HumanPlayer("BLACK");
+    else
+        this->Two = new AIPlayer("BLACK");
 	this->chess_board = new ChessBoard();
 }
 
