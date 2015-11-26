@@ -6,7 +6,7 @@ public:
 	GameHandler(bool isHumanP1, bool isHumanP2);
 	~GameHandler();
 
-	void play_game();
+	int play_game();
 private:
 	Player* One;
 	Player* Two;

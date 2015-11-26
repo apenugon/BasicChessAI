@@ -2,6 +2,10 @@
 
 using namespace std;
 
+bool ChessBoard::isPieceHere(int row, int col) {
+    return board_state[row][col] != 0;
+}
+
 std::vector<Move> ChessBoard::get_valid_moves() {
     return this->valid_moves;
 }
@@ -538,6 +542,15 @@ void ChessBoard::printBoardState() {
 	cout << "   a  b  c  d  e  f  g  h " << endl << endl;
 
 #endif
+}
+
+int ChessBoard::winner() {
+    if (isInCheck(WHITE))
+        return BLACK;
+    else if (isInCheck(BLACK))
+        return WHITE;
+    else
+        return 0;
 }
 
 bool ChessBoard::is_game_over() {

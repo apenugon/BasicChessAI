@@ -13,6 +13,9 @@ private:
     std::string name;
     int team;
 
-    std::pair<int, Move> evaluate_node(ChessBoard* board, int depth, int alpha, int beta);
+    std::pair<int, Move> evaluate_node(ChessBoard* board, int depth, int alpha, int beta, bool is_quiet);
+    
+    std::pair<int, Move> q_search(ChessBoard* board, int depth, int alpha, int beta, bool is_quiet);
     int evaluate_board(ChessBoard* board);
+    bool is_quiet(Move move, ChessBoard* resulting_board);
 };

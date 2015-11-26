@@ -22,9 +22,20 @@ int main(int argc, char* args[]) {
 	GameHandler* myGameHandler;;
 	while(1) {
 		myGameHandler = new GameHandler(is_player1_human, is_player2_human);
-		myGameHandler->play_game();
+		int winner = myGameHandler->play_game();
 		delete myGameHandler;
-        std::cout << "The last player won! New game? (y/n)";
+
+        switch (winner) {
+        case 1:
+            std::cout << "Black won!";
+            break;
+        case -1:
+            std::cout << "White won!";
+            break;
+        default:
+            std::cout << "Nobody won - its a stalemate.";
+        }
+        std::cout << " New game? (y/n): ";
         char d;
         std::cin >> d;
         if (d == 'n') {

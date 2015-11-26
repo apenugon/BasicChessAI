@@ -54,6 +54,7 @@ public:
  	void print_available_moves();
  	void check_integrity();
  	bool is_game_over();
+    int winner();
     int num_available_moves();
     std::vector<Move> get_valid_moves();
     ChessBoard::Teams get_team();
@@ -61,6 +62,7 @@ public:
     std::vector<Piece*> getPieceList(ChessBoard::Teams team);
     bool square_in_danger(int row, int col);
     bool isInCheck(Teams team);
+    bool isPieceHere(int row, int col);
 private:
  	// In our definition for the board, the actual 
  	// board is within the range 2-10. So we have an 8x8

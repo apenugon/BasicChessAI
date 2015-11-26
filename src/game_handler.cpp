@@ -18,7 +18,7 @@ GameHandler::~GameHandler() {
 	delete chess_board;
 }
 
-void GameHandler::play_game() {
+int GameHandler::play_game() {
 	Player* current_player = One; //Start with white
 	// should be while game not over
     std::cin.ignore();
@@ -41,4 +41,5 @@ void GameHandler::play_game() {
 			#endif
 		}
 	}
+    return chess_board->winner();
 }
