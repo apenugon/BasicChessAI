@@ -7,9 +7,23 @@ Move::Move() {
     // WARNING - nothing is instantiated here
 }
 
-Move::Move(MoveType move, string from, string to, Piece::Types type) {
+Move::Move(MoveType move, string from, string to, string type) {
+    this->type = Piece::NONE;
+    switch (type[0]) {
+    case 'R':
+        this->type = Piece::ROOK;
+        break;
+    case 'N':
+        this->type = Piece::KNIGHT;
+        break;
+    case 'B':
+        this->type = Piece::BISHOP;
+        break;
+    case 'Q':
+        this->type = Piece::QUEEN;
+        break;
+   }
     this->move = move;
-    this->type = type;
     this->from = make_pair(from[1] - '0' + BORDER_DEPTH - 1, charToCol[from[0]]);
     this->to = make_pair(to[1]-'0'+BORDER_DEPTH-1, charToCol[to[0]]);
 }
@@ -18,7 +32,7 @@ Move::Move(MoveType move, pair<int,int> from, pair<int,int> to, Piece::Types typ
     this->move = move;
     this->from = from;
     this->to = to;
-this->type = type;
+    this->type = type;
 }
 
 Move::~Move() {

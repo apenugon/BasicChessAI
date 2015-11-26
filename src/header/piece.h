@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <algorithm>
+#include <tuple>
 #include <stdexcept>
 
 #define CHESS_PLAY_LENGTH 8
@@ -29,14 +30,14 @@ public:
 	};
 
  	enum Types {
-		NONE,
-		PAWN,
-		ROOK,
-		BISHOP,
-		KING,
-		QUEEN,
-		KNIGHT,
-		INVALID,
+		NONE=0,
+		PAWN=1,
+		ROOK=2,
+		BISHOP=3,
+		KING=4,
+		QUEEN=5,
+		KNIGHT=6,
+		INVALID=7,
 	};
 
 
@@ -51,20 +52,22 @@ public:
 	int get_team() const;
 	bool threatens_king() const;
     bool get_has_moved() const;
-    bool promote();
+    void promote(Piece::Types type);
     Piece::PlayerPiece get_player_piece()const ;
     void check_integrity();
     bool is_special_move_used();
     int get_same_pos_counter();
     int get_move_counter();
+    bool get_can_promote();
 private:
 	std::vector<std::pair<int,int>> valid_moves;
 
+    bool can_promote = false;
     bool has_moved = false;
 	bool is_king_threatened = false;
 	int row;
 	int col;
-	int team; // -1 if White, 1 if Black
+    int team; // -1 if White, 1 if Black
     bool special_move_used = false;
     int same_pos_counter = 0;
     int move_counter = 0;

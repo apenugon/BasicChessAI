@@ -6,13 +6,22 @@
 
 void Piece::add_move(int row, int col, int board_state[][BOARD_LENGTH]) {
 	if (CAN_PLACE_PIECE(row,col)) {
+#ifdef DEBUG
+    int orow;
+    int ocol;
+    std::tie(orow, ocol) = get_coords();
+    if (row == orow && col == ocol) {
+        std::cout << "Moving to same position!" << std::endl;
+    }
+#endif
 		auto coord = std::make_pair(row,col);
 		valid_moves.push_back(coord);
 		is_king_threatened |= (abs(board_state[row][col]) == Types::KING);
-		#ifdef DEBUG
-		//std::cout << "adding move: " << row << " : " << col << std::endl;
-		#endif
-	} 
+    } 
+}
+
+bool Piece::get_can_promote() {
+    return can_promote;
 }
 
 Piece::PlayerPiece Piece::get_player_piece() const {
@@ -72,13 +81,8 @@ void Piece::move(int inRow, int inCol, int board_state[][BOARD_LENGTH]) {
     // Actually this should be done at the board level
 }
 
-bool Piece::promote() {
-    bool toPromote = (this->player_piece == WHITE_PAWN && this->row == 9) ||
-        (this->player_piece == BLACK_PAWN && this->row == 2);
-    if (toPromote)
-        this->player_piece = (PlayerPiece)(QUEEN * this->team);
-
-    return toPromote;
+void Piece::promote(Piece::Types type) {
+    this->player_piece = (Piece::PlayerPiece)(type * this->team);
 }
 
 bool Piece::is_special_move_used() {
@@ -105,6 +109,7 @@ void Piece::generate_valid_moves(int board_state[][BOARD_LENGTH]) {
 	valid_moves.clear(); // Starting from scratch
     same_pos_counter++;
 
+    this->can_promote = false;
 	this->is_king_threatened = false;
 	int i;
 	int move_factor = team * -1;
@@ -121,6 +126,8 @@ void Piece::generate_valid_moves(int board_state[][BOARD_LENGTH]) {
 				add_move(row + 1 * move_factor, col + 1, board_state);
 			if (board_state[row+1*move_factor][col-1] * team < 0 && board_state[row+1*move_factor][col-1] != Types::INVALID)
 				add_move(row + 1 * move_factor, col - 1, board_state);
+            this->can_promote = ((team == -1 && row == 8) ||
+                (team == 1 && row == 3));
 			break;
 		case QUEEN:
 		case ROOK:

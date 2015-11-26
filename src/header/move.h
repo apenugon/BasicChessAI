@@ -21,7 +21,7 @@ public:
     };
 
     Move();
-    Move(MoveType move, std::string from, std::string to, Piece::Types type = Piece::NONE);
+    Move(MoveType move, std::string from, std::string to, std::string type = "");
     Move(MoveType move, std::pair<int,int> from, std::pair<int,int> to, Piece::Types type = Piece::NONE);
     ~Move();
 

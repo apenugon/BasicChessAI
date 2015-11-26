@@ -46,8 +46,23 @@ Move HumanPlayer::get_move(ChessBoard* board) {
 		}
 
 		else if (command.compare("CASTLE") == 0) {
+            if (tokens.size() < 3 || tokens[1].length() != 2 ||
+                    tokens[2].length() != 2) {
+                std::cout << "Improper Coordinates Specified" << std:: endl;
+                continue;
+            }
 			return Move(Move::CASTLE, tokens[1], tokens[2]);
 		}
+
+        else if (command.compare("PROMOTE") == 0) {
+            if (tokens.size() < 4 || tokens[1].length() != 2 ||
+                    tokens[2].length() != 2 ||
+                    tokens[3].length() != 1) {
+                std::cout << "Improper coordinates/piece - see MOVES" << std::endl;
+                continue;
+            }
+            return Move(Move::PROMOTE, tokens[1], tokens[2], tokens[3]);
+        }
 
 		else if (command.compare("MOVES") == 0) {
 			board->print_available_moves();

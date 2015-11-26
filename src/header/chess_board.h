@@ -1,3 +1,6 @@
+#ifndef CHESSBOARD_H
+#define CHESSBOARD_H
+
 /*----------------------------------------------------------
  *
  *	Class ChessBoard - stores the state of the chess board
@@ -90,3 +93,4 @@ private:
 				int new_board_state[][BOARD_LENGTH], 
 				Piece* new_pieceArray[][BOARD_LENGTH]);
 };
+#endif

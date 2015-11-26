@@ -39,7 +39,24 @@ void ChessBoard::print_available_moves() {
 		int to_row;
 		int to_col;
         tie(to_row, to_col) = to;
-		std::cout << move << " " << colNumToChar[from_col-BORDER_DEPTH]  << from_row-BORDER_DEPTH+1 << " " << colNumToChar[to_col-BORDER_DEPTH] << to_row-BORDER_DEPTH+1 << std::endl;
+		std::cout << move << " " << colNumToChar[from_col-BORDER_DEPTH]  << from_row-BORDER_DEPTH+1 << " " << colNumToChar[to_col-BORDER_DEPTH] << to_row-BORDER_DEPTH+1;
+
+        switch (m.get_type()) {
+        case Piece::ROOK:
+            cout << " R";
+            break;
+        case Piece::KNIGHT:
+            cout << " N";
+            break;
+        case Piece::BISHOP:
+            cout << " B";
+            break;
+        case Piece::QUEEN:
+            cout << " Q";
+        default:
+            break;
+        }
+        cout << endl;
 	}
 #ifdef DEBUG
     std::cout << "Pieces Present:" << std::endl;
@@ -84,8 +101,12 @@ void ChessBoard::move_piece(Piece *piece,
 }
 
 ChessBoard* ChessBoard::makeMove(Move move, bool is_valid, bool do_generate_moves) {
-	auto in_bounds = [] (std::pair<int,int> in_coords) {return 0 <= std::get<0>(in_coords) && std::get<0>(in_coords) < BOARD_LENGTH &&
-                                                                0 <= std::get<1>(in_coords) && std::get<1>(in_coords) < BOARD_LENGTH;};
+	auto in_bounds = [] (std::pair<int,int> in_coords) {
+        int row;
+        int col;
+        tie(row, col) = in_coords;
+        return (unsigned)row < BOARD_LENGTH &&
+               (unsigned)col < BOARD_LENGTH;};
 
 	// Validate move
 	if (!is_valid) {
@@ -131,7 +152,7 @@ ChessBoard* ChessBoard::makeMove(Move move, bool is_valid, bool do_generate_move
 		for (int j = 0; j < BOARD_LENGTH; j++) {
 			new_board_state[i][j] = board_state[i][j];
 			if (pieceArray[i][j] != NULL) {
-				if (move_type == Move::MOVE && i == toRow && j == toCol) {
+				if ((move_type == Move::MOVE || move_type == Move::PROMOTE) && i == toRow && j == toCol) {
 					// This piece is being taken - we don't need it in the next board
 					new_pieceArray[i][j] = NULL;
 					new_board_state[i][j] = Piece::Types::NONE;
@@ -151,6 +172,7 @@ ChessBoard* ChessBoard::makeMove(Move move, bool is_valid, bool do_generate_move
 		}
 	} 
 
+    auto piece_to_move = new_pieceArray[fromRow][fromCol];
 	switch (move_type) {
         case Move::CASTLE: {
 			auto king = new_pieceArray[fromRow][fromCol];
@@ -167,9 +189,15 @@ ChessBoard* ChessBoard::makeMove(Move move, bool is_valid, bool do_generate_move
 			}
 			break;
 		}
+        case Move::PROMOTE: {
+            move_piece(piece_to_move, toRow, toCol, new_board_state, new_pieceArray);
+            piece_to_move->promote(move.get_type());
+            // Update new board state
+            new_board_state[toRow][toCol] = (int)piece_to_move->get_player_piece();
+            break;
+        }
 		default:
 			// Just do a normal move
-			auto piece_to_move = new_pieceArray[fromRow][fromCol];
 			move_piece(piece_to_move, toRow, toCol, new_board_state, new_pieceArray);
 	}
 
@@ -245,16 +273,10 @@ void ChessBoard::generate_piece_moves() {
 	// Generate opposing pieces' moves.
 	for (int i = 0; i < PieceListBlack.size(); i++) {
         auto p = PieceListBlack[i];
-        if (p->promote()) {
-            board_state[std::get<0>(p->get_coords())][std::get<1>(p->get_coords())] = (int)(p->get_player_piece());
-        }
 		p->generate_valid_moves(board_state);
 	}
 	for (int i = 0; i < PieceListWhite.size(); i++) {
         auto p = PieceListWhite[i];
-        if (p->promote()) {
-            board_state[std::get<0>(p->get_coords())][std::get<1>(p->get_coords())] = (int)(p->get_player_piece());
-        }
 		p->generate_valid_moves(board_state);
 	}
 }
@@ -292,7 +314,21 @@ void ChessBoard::generate_moves() {
     #pragma omp parallel for reduction(merge : local_valid_moves)
 	for (std::vector<Piece*>::iterator p = useVector->begin(); p < useVector->end(); ++p) {
 		for (auto piece_move : (*p)->get_valid_moves()) {	
-			local_valid_moves.push_back(Move(Move::MOVE, (*p)->get_coords(), piece_move));
+#ifdef DEBUG
+            if (piece_move == (*p)->get_coords()) {
+                cout << "Alert! Moving to same piece!!" << endl;
+            }
+#endif
+            if ((*p)->get_can_promote()) {
+                // Need to add all possible ways to promote pawn
+                local_valid_moves.push_back(Move(Move::PROMOTE, (*p)->get_coords(), piece_move, Piece::ROOK));
+                local_valid_moves.push_back(Move(Move::PROMOTE, (*p)->get_coords(), piece_move, Piece::BISHOP));
+                local_valid_moves.push_back(Move(Move::PROMOTE, (*p)->get_coords(), piece_move, Piece::KNIGHT));
+                local_valid_moves.push_back(Move(Move::PROMOTE, (*p)->get_coords(), piece_move, Piece::QUEEN));
+
+            } else {
+			    local_valid_moves.push_back(Move(Move::MOVE, (*p)->get_coords(), piece_move));
+            }
 		}
 	}
 
@@ -373,6 +409,15 @@ void ChessBoard::generate_moves() {
 		}
 
 	}
+
+#ifdef DEBUG
+
+    for (auto m : valid_moves) {
+        if (m.get_from() == m.get_to()) {
+            cout << "Alert! Moving to same piece!!" << endl;
+        }
+    }
+#endif
 
 	//Are there pieces in between?
 	auto filter_function = [this] (Move move) {
