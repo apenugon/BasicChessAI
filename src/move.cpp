@@ -51,18 +51,3 @@ string Move::get_move_string() const {
         return "PROMOTE";
     }
 }
-
-void Move::operator=(const Move& rhs) {
-    this->move = rhs.get_move();
-    this->from = rhs.get_from();
-    this->to = rhs.get_to();
-    this->type = rhs.get_type();
-}
-
-bool Move::operator==(const Move& rhs) {
-    return
-        this->get_move() == rhs.get_move() &&
-        this->get_from() == rhs.get_from() &&
-        this->get_to() == rhs.get_to() &&
-        this->get_type() == rhs.get_type();
-}

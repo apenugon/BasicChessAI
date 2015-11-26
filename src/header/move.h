@@ -25,8 +25,19 @@ public:
     Move(MoveType move, std::pair<int,int> from, std::pair<int,int> to, Piece::Types type = Piece::NONE);
     ~Move();
 
-    bool operator ==(const Move& rhs);
-    void operator =(const Move& rhs);
+    inline bool operator ==(const Move& rhs) {
+        return
+            this->get_move() == rhs.get_move() &&
+            this->get_from() == rhs.get_from() &&
+            this->get_to() == rhs.get_to() &&
+            this->get_type() == rhs.get_type();
+    }
+    inline void operator =(const Move& rhs) {
+        this->move = rhs.get_move();
+        this->from = rhs.get_from();
+        this->to = rhs.get_to();
+        this->type = rhs.get_type();
+    }
 
     MoveType get_move() const;
     std::pair<int,int> get_from() const;
