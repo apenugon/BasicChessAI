@@ -9,10 +9,10 @@ CFLAGS=$(CFLAGS_BASE)
 LDFLAGS_BASE= -fopenmp
 LDFLAGS = $(LDFLAGS_BASE)
 
-_DEPS=chess_board.h piece.h game_handler.h player.h human_player.h ai_player.h
+_DEPS=chess_board.h piece.h game_handler.h player.h human_player.h ai_player.h move.h
 DEPS=$(patsubst %,$(HEADERDIR)/%,$(_DEPS))
 
-_OBJS=main.o chess_board.o piece.o game_handler.o human_player.o ai_player.o
+_OBJS=main.o chess_board.o piece.o game_handler.o human_player.o ai_player.o move.o
 OBJS=$(patsubst %,$(OBJDIR)/%, $(_OBJS))
 
 default: CFLAGS += -O3

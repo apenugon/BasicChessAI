@@ -12,6 +12,7 @@
 #include <functional>
 #include <string>
 
+#include "move.h"
 #include "piece.h"
 
 #define NUM_PIECES 7
@@ -36,12 +37,7 @@ public:
  		BLACK=1,
  	};
 
- 	enum MoveType {
- 		MOVE,
- 		CASTLE,
- 	};
-
- 	ChessBoard();
+    ChessBoard();
  	ChessBoard(int board_state[][BOARD_LENGTH], 
 		std::vector<Piece*> PieceListWhite, 
 		std::vector<Piece*> PieceListBlack, 
@@ -51,15 +47,12 @@ public:
  	~ChessBoard();
 	int calculateScore();
  	void printBoardState();
- 	ChessBoard* makeMove(MoveType move_type, std::pair<int,int> from, std::pair<int,int> to, bool is_valid = false, bool do_generate_moves = true);
- 	ChessBoard* makeMove(MoveType move_type, std::string from, std::string to);
- 	ChessBoard* makeMove(std::tuple<MoveType, std::string, std::string> move);
- 	ChessBoard* makeMove(std::tuple<MoveType, std::pair<int,int>, std::pair<int,int>> move);
+ 	ChessBoard* makeMove(Move move, bool is_valid = false, bool do_generate_moves = true);
  	void print_available_moves();
  	void check_integrity();
  	bool is_game_over();
     int num_available_moves();
-    std::vector<std::tuple<MoveType, std::pair<int,int>,std::pair<int,int>>> get_valid_moves();
+    std::vector<Move> get_valid_moves();
     ChessBoard::Teams get_team();
     ChessBoard::Teams get_opposing_team();
     std::vector<Piece*> getPieceList(ChessBoard::Teams team);
@@ -73,9 +66,8 @@ private:
     // Vars that contain info from past game boards
 	Teams current_team;
 
-    char colNumToChar[CHESS_PLAY_LENGTH] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
- 	std::map<char, int> colCharToNum;
  	char humanReadablePieces[NUM_PIECES] = {'_', 'P', 'R', 'B', 'K', 'Q', 'N'};
+    char colNumToChar[8] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
  	int board_state[BOARD_LENGTH][BOARD_LENGTH];
  	std::vector<Piece*> PieceListWhite;
@@ -86,10 +78,8 @@ private:
 
  	int prevMoveStatusCode;
 
- 	std::vector<std::tuple<MoveType, std::pair<int,int>,std::pair<int,int>>> valid_moves;
+ 	std::vector<Move> valid_moves;
 
- 	void initHumanReadablePieces();
- 	void initColCharToNum();
  	void newPiece(Piece::PlayerPiece player_piece, int row, int col, Teams team);	
  	void generate_piece_moves();
  	void generate_moves();

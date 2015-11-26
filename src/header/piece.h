@@ -1,3 +1,6 @@
+#ifndef PIECE_H
+#define PIECE_H
+
 #include <vector>
 #include <stdlib.h>
 #include <iostream>
@@ -68,3 +71,5 @@ private:
 	Piece::PlayerPiece player_piece;
 	void add_move(int row, int col, int board_state[][BOARD_LENGTH]);
 };
+
+#endif

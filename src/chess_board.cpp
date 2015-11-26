@@ -2,18 +2,7 @@
 
 using namespace std;
 
-void ChessBoard::initColCharToNum() {
-	colCharToNum['a'] = 0;
-	colCharToNum['b'] = 1;
-	colCharToNum['c'] = 2;
-	colCharToNum['d'] = 3;
-	colCharToNum['e'] = 4;
-	colCharToNum['f'] = 5;
-	colCharToNum['g'] = 6;
-	colCharToNum['h'] = 7;
-}
-
-std::vector<std::tuple<ChessBoard::MoveType,std::pair<int,int>, std::pair<int,int>>> ChessBoard::get_valid_moves() {
+std::vector<Move> ChessBoard::get_valid_moves() {
     return this->valid_moves;
 }
 
@@ -40,13 +29,16 @@ void ChessBoard::print_available_moves() {
 	std::string team = current_team == WHITE ? "WHITE" : "BLACK";
 	std::cout << "Available Moves for " << team << std::endl;
 	for (auto m : valid_moves) {
-		std::string move = std::get<0>(m) == MOVE ? "MOVE" : "CASTLE";
-		auto from = std::get<1>(m);
-		auto to = std::get<2>(m);
-		int from_row = std::get<0>(from);
-		int from_col = std::get<1>(from);
-		int to_row = std::get<0>(to);
-		int to_col = std::get<1>(to);
+		std::string move = m.get_move_string();
+		pair<int,int> from = m.get_from();
+		pair<int,int> to = m.get_to();
+
+		int from_row;
+		int from_col;
+        tie(from_row, from_col) = from;
+		int to_row;
+		int to_col;
+        tie(to_row, to_col) = to;
 		std::cout << move << " " << colNumToChar[from_col-BORDER_DEPTH]  << from_row-BORDER_DEPTH+1 << " " << colNumToChar[to_col-BORDER_DEPTH] << to_row-BORDER_DEPTH+1 << std::endl;
 	}
 #ifdef DEBUG
@@ -81,40 +73,23 @@ void ChessBoard::move_piece(Piece *piece,
 				int toCol, 
 				int new_board_state[][BOARD_LENGTH], 
 				Piece* new_pieceArray[][BOARD_LENGTH]) {
-	auto original_position = piece->get_coords();
-	new_board_state[std::get<0>(original_position)][std::get<1>(original_position)] = Piece::Types::NONE;
-	new_board_state[toRow][toCol] = board_state[std::get<0>(original_position)][std::get<1>(original_position)];
-	new_pieceArray[std::get<0>(original_position)][std::get<1>(original_position)] = NULL;
+    int orig_row;
+    int orig_col;
+	tie(orig_row, orig_col) = piece->get_coords();
+	new_board_state[orig_row][orig_col] = Piece::Types::NONE;
+	new_board_state[toRow][toCol] = board_state[orig_row][orig_col];
+	new_pieceArray[orig_row][orig_col] = NULL;
 	new_pieceArray[toRow][toCol] = piece;
 	piece->move(toRow, toCol, new_board_state);
 }
 
-ChessBoard* ChessBoard::makeMove(std::tuple<MoveType, std::string, std::string> move) {
-	return makeMove(std::get<0>(move), std::get<1>(move), std::get<2>(move));
-}
-
-ChessBoard* ChessBoard::makeMove(std::tuple<MoveType, std::pair<int,int>, std::pair<int,int>> move) {
-	return makeMove(std::get<0>(move), std::get<1>(move), std::get<2>(move));
-}
-
-ChessBoard* ChessBoard::makeMove(MoveType move_type, std::string from, std::string to) {
-	std::pair<int,int> from_pair = std::make_pair(from.at(1) - '0' + BORDER_DEPTH - 1, colCharToNum[from.at(0)]+BORDER_DEPTH);
-	std::pair<int,int> to_pair = std::make_pair(to.at(1) - '0' + BORDER_DEPTH - 1, colCharToNum[to.at(0)]+BORDER_DEPTH);
-#ifdef DEBUG
-    std::cout << "Making given move: (" << std::get<0>(from_pair) << "," << std::get<1>(from_pair) << "),(";
-    std::cout << std::get<0>(to_pair) << "," << std::get<1>(to_pair) << ")" << std::endl;
-#endif
-	return makeMove(move_type, from_pair, to_pair);
-}
-
-ChessBoard* ChessBoard::makeMove(MoveType move_type, std::pair<int,int> from, std::pair<int,int> to, bool is_valid, bool do_generate_moves) {
+ChessBoard* ChessBoard::makeMove(Move move, bool is_valid, bool do_generate_moves) {
 	auto in_bounds = [] (std::pair<int,int> in_coords) {return 0 <= std::get<0>(in_coords) && std::get<0>(in_coords) < BOARD_LENGTH &&
                                                                 0 <= std::get<1>(in_coords) && std::get<1>(in_coords) < BOARD_LENGTH;};
-    auto move = std::make_tuple(move_type, from, to);
 
 	// Validate move
 	if (!is_valid) {
-		if (!in_bounds(from) || !in_bounds(to))
+		if (!in_bounds(move.get_from()) || !in_bounds(move.get_to()))
         	return NULL;
 		for (int i = 0; i < valid_moves.size(); i++) {
 			is_valid |= valid_moves[i] == move;
@@ -134,10 +109,15 @@ ChessBoard* ChessBoard::makeMove(MoveType move_type, std::pair<int,int> from, st
 
 	// Here I need to copy over both piece lists into a new piece list. The pieces need to be distinct
 
-    int fromRow = std::get<0>(from);
-    int fromCol = std::get<1>(from);
-    int toRow = std::get<0>(to);
-    int toCol = std::get<1>(to);
+    int fromRow;
+    int fromCol;
+    tie(fromRow, fromCol) = move.get_from();
+
+    int toRow;
+    int toCol;
+    tie(toRow, toCol) = move.get_to();
+
+    auto move_type = move.get_move();
 
     // Check for En Pessent
     if (abs(fromRow - toRow) == 1 &&
@@ -151,7 +131,7 @@ ChessBoard* ChessBoard::makeMove(MoveType move_type, std::pair<int,int> from, st
 		for (int j = 0; j < BOARD_LENGTH; j++) {
 			new_board_state[i][j] = board_state[i][j];
 			if (pieceArray[i][j] != NULL) {
-				if (move_type == MOVE && i == toRow && j == toCol) {
+				if (move_type == Move::MOVE && i == toRow && j == toCol) {
 					// This piece is being taken - we don't need it in the next board
 					new_pieceArray[i][j] = NULL;
 					new_board_state[i][j] = Piece::Types::NONE;
@@ -172,25 +152,25 @@ ChessBoard* ChessBoard::makeMove(MoveType move_type, std::pair<int,int> from, st
 	} 
 
 	switch (move_type) {
-		case CASTLE: {
-			auto king = new_pieceArray[std::get<0>(from)][std::get<1>(from)];
-			auto rook = new_pieceArray[std::get<0>(to)][std::get<1>(to)];
+        case Move::CASTLE: {
+			auto king = new_pieceArray[fromRow][fromCol];
+			auto rook = new_pieceArray[toRow][toCol];
 			// Determine if this is a left castle or a right castle
-			if (std::get<1>(to) < std::get<1>(from)) {
+			if (toCol < fromCol) {
 				// Left Castle
-				move_piece(king, std::get<0>(from), std::get<1>(from)-2, new_board_state, new_pieceArray);
-				move_piece(rook, std::get<0>(to), std::get<1>(to)+3, new_board_state, new_pieceArray);
+				move_piece(king, fromRow, fromCol-2, new_board_state, new_pieceArray);
+				move_piece(rook, toRow, toCol+3, new_board_state, new_pieceArray);
 			} else {
 				// Right Castle
-				move_piece(king, std::get<0>(from), std::get<1>(from)+2, new_board_state, new_pieceArray);
-				move_piece(rook, std::get<0>(to), std::get<1>(to)-2, new_board_state, new_pieceArray);
+				move_piece(king, fromRow, fromCol+2, new_board_state, new_pieceArray);
+				move_piece(rook, toRow, toCol-2, new_board_state, new_pieceArray);
 			}
 			break;
 		}
 		default:
 			// Just do a normal move
-			auto piece_to_move = new_pieceArray[std::get<0>(from)][std::get<1>(from)];
-			move_piece(piece_to_move, std::get<0>(to), std::get<1>(to), new_board_state, new_pieceArray);
+			auto piece_to_move = new_pieceArray[fromRow][fromCol];
+			move_piece(piece_to_move, toRow, toCol, new_board_state, new_pieceArray);
 	}
 
 
@@ -304,16 +284,15 @@ void ChessBoard::generate_moves() {
 		}
 	}
 
-    std::vector<std::tuple<MoveType, std::pair<int,int>, std::pair<int,int>>>local_valid_moves;
+    std::vector<Move> local_valid_moves;
 
 
-    #pragma omp declare reduction (merge : std::vector<std::tuple<MoveType, std::pair<int,int>, std::pair<int,int>>> : omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end())) 
+    #pragma omp declare reduction (merge : std::vector<Move> : omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end())) 
 	// Generate move sets for each piece, add them to the actual valid move list
     #pragma omp parallel for reduction(merge : local_valid_moves)
 	for (std::vector<Piece*>::iterator p = useVector->begin(); p < useVector->end(); ++p) {
-		for (auto move : (*p)->get_valid_moves()) {
-			auto move_tuple = std::make_tuple(MOVE, (*p)->get_coords(), move);
-			local_valid_moves.push_back(move_tuple);
+		for (auto piece_move : (*p)->get_valid_moves()) {	
+			local_valid_moves.push_back(Move(Move::MOVE, (*p)->get_coords(), piece_move));
 		}
 	}
 
@@ -323,17 +302,17 @@ void ChessBoard::generate_moves() {
     for (auto p : (*useVector)) {
         if (p->typeOf() == Piece::Types::PAWN) {
             // Now check for En Passent conditions
-            int row = std::get<0>(p->get_coords());
-            int col = std::get<1>(p->get_coords());
-
+            int row;
+            int col;
+            tie(row, col) = p->get_coords();
             // Left Side:
             if (pieceArray[row][col-1] != NULL &&
                 pieceArray[row][col-1]->is_special_move_used() == true &&
                 pieceArray[row][col-1]->get_same_pos_counter() == 1 &&
                 pieceArray[row][col-1]->get_move_counter() == 1 &&
                 pieceArray[row][col-1]->get_team() != this->current_team) {
-                auto move_tuple = std::make_tuple(MOVE, p->get_coords(), std::make_pair(row-current_team, col-1));
-                valid_moves.push_back(move_tuple);
+
+                valid_moves.push_back(Move(Move::MOVE, p->get_coords(), make_pair(row-current_team, col-1)));
             }
             // Right
             if (pieceArray[row][col+1] != NULL &&
@@ -341,8 +320,8 @@ void ChessBoard::generate_moves() {
                 pieceArray[row][col+1]->get_same_pos_counter() == 1 &&
                 pieceArray[row][col+1]->get_move_counter() == 1 &&
                 pieceArray[row][col+1]->get_team() != this->current_team) {
-                auto move_tuple = std::make_tuple(MOVE, p->get_coords(), std::make_pair(row-current_team, col+1));
-                valid_moves.push_back(move_tuple);
+
+                valid_moves.push_back(Move(Move::MOVE, p->get_coords(), make_pair(row-current_team, col+1)));
             }
         }
 }
@@ -371,8 +350,7 @@ void ChessBoard::generate_moves() {
 				}
 			}
 			if (areFree) {
-				auto move = std::make_tuple(CASTLE, coords, rook->get_coords());
-				valid_moves.push_back(move);
+				valid_moves.push_back(Move(Move::CASTLE, coords, rook->get_coords()));
 			}
 		}
 		// Rook Right
@@ -390,30 +368,29 @@ void ChessBoard::generate_moves() {
 				}
 			}
 			if (areFree) {
-				auto move = std::make_tuple(CASTLE, king->get_coords(), rook->get_coords());
-				valid_moves.push_back(move);
+				valid_moves.push_back(Move(Move::CASTLE, king->get_coords(), rook->get_coords()));
 			}
 		}
 
 	}
 
 	//Are there pieces in between?
-	auto filter_function = [this] (std::tuple<MoveType, std::pair<int,int>,std::pair<int,int>> move) {
+	auto filter_function = [this] (Move move) {
 		// Make move, determine if king in check
 		#ifdef DEBUG
-		int a = std::get<0>(std::get<1>(move));
-		int b = std::get<1>(std::get<1>(move));
-		int c = std::get<0>(std::get<2>(move));
-		int d = std::get<1>(std::get<2>(move));
+		int a = std::get<0>(move.get_from());
+		int b = std::get<1>(move.get_from());
+		int c = std::get<0>(move.get_to());
+		int d = std::get<1>(move.get_to());
 		std::cout << "Filtering move " << a << "," << b << " " << c << "," <<  d << std::endl;
 		#endif
-		ChessBoard* nextBoard = this->makeMove(std::get<0>(move), std::get<1>(move), std::get<2>(move), true, false);
+		ChessBoard* nextBoard = this->makeMove(move, true, false);
 		bool is_invalid_move = nextBoard->isInCheck(current_team);
 		delete nextBoard;
 		return is_invalid_move;
 	};
 
-    std::vector<std::tuple<MoveType, std::pair<int,int>, std::pair<int,int>>> surviving_moves;
+    std::vector<Move> surviving_moves;
 
     #pragma omp parallel for reduction(merge : surviving_moves)
     for (int i = 0; i < valid_moves.size(); i++) {
@@ -424,9 +401,6 @@ void ChessBoard::generate_moves() {
     }
 
     this->valid_moves = surviving_moves;
-
-    // Filters the moves by whether or not the king is present
-	//valid_moves.erase(std::remove_if(valid_moves.begin(), valid_moves.end(), filter_function), valid_moves.end());
 }
 
 // Creates a new chessboard, set up with the next board state.
@@ -435,8 +409,7 @@ ChessBoard::ChessBoard(int board_state[][BOARD_LENGTH],
 	std::vector<Piece*> PieceListBlack, 
 	Piece* pieceArray[][BOARD_LENGTH],
 	Teams team,
-	bool do_generate_moves) {
-	initColCharToNum();
+	bool do_generate_moves) {	
 
 	this->PieceListWhite = PieceListWhite;
 	this->PieceListBlack = PieceListBlack;
@@ -461,8 +434,7 @@ ChessBoard::ChessBoard(int board_state[][BOARD_LENGTH],
 
 // Creates a _new_ chessboard, set up with a standard chess start
 ChessBoard::ChessBoard() {
-	// Initialize the map colCharToNum
-	initColCharToNum();
+
 	// First zero out the board (Or set to be invalid)
 	for (int i = 0; i < BOARD_LENGTH; i++) {
 		for (int j = 0; j < BOARD_LENGTH; j++) {
@@ -534,9 +506,10 @@ void ChessBoard::check_integrity() {
 		if (p->get_team() != WHITE) {
 			std::runtime_error("Piece list mismatch, white");
 		}
-		auto coords = p->get_coords();
-		int row = std::get<0>(coords);
-		int col = std::get<1>(coords);
+
+		int row;
+		int col;
+        tie(row, col) = p->get_coords();
 		if (board_state[row][col] != p->get_player_piece()) {
 			std::runtime_error("Piece board mismatch");
 		}
@@ -550,9 +523,10 @@ void ChessBoard::check_integrity() {
 		if (p->get_team() != BLACK) {
 			std::runtime_error("Piece list mismatch, black");
 		}
-		auto coords = p->get_coords();
-		int row = std::get<0>(coords);
-		int col = std::get<1>(coords);
+
+		int row;
+		int col;
+        tie(row, col) = p->get_coords();
 		if (board_state[row][col] != p->get_player_piece()) {
 			std::runtime_error("Piece board mismatch");
 		}

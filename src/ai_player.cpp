@@ -19,22 +19,15 @@ AIPlayer::~AIPlayer() {
 
 }
 
-std::tuple<ChessBoard::MoveType, std::string, std::string> AIPlayer::get_move(ChessBoard* board) {
+Move AIPlayer::get_move(ChessBoard* board) {
 
-    std::pair<int,std::tuple<ChessBoard::MoveType, std::pair<int,int>, std::pair<int,int>>>* score_move;
+    auto score_move = evaluate_node(board, 0, INT_MIN, INT_MAX);
     
     
-
-    
-    auto score_move_val = evaluate_node(board, 0, INT_MIN, INT_MAX);
-    score_move = &score_move_val;
-    
-    
-
-    auto move = std::get<1>(*score_move);
-    auto move_type = std::get<0>(move);
-    auto from = std::get<1>(move);
-    auto to = std::get<2>(move);
+    auto move = std::get<1>(score_move);
+    auto move_type = move.get_move();
+    auto from = move.get_from();
+    auto to = move.get_to();
 
     std::cout << "from: " << std::get<0>(from) << "," << std::get<1>(from);
     std::cout << " to: " << std::get<0>(to) << "," << std::get<1>(to) << std::endl;
@@ -50,16 +43,16 @@ std::tuple<ChessBoard::MoveType, std::string, std::string> AIPlayer::get_move(Ch
     std::string to_str = to_ss.str();
     std::cout << "AI moving from " << from_str << " to " << to_str << std::endl;
 
-    return std::make_tuple(move_type, from_str, to_str);
+    return move;
 }
 
-std::pair<int, std::tuple<ChessBoard::MoveType, std::pair<int,int>, std::pair<int,int>>> AIPlayer::evaluate_node(ChessBoard* board, int depth, int alpha, int beta) {
+std::pair<int, Move> AIPlayer::evaluate_node(ChessBoard* board, int depth, int alpha, int beta) {
     if (depth == MINIMAX_DEPTH)
-        return std::make_pair(evaluate_board(board), std::make_tuple(ChessBoard::MOVE, std::make_pair(0,0), std::make_pair(0,0)));
+        return std::make_pair(evaluate_board(board), Move(Move::MOVE, std::make_pair(0,0), std::make_pair(0,0)));
 
-    std::map<int, std::tuple<ChessBoard::MoveType, std::pair<int,int>, std::pair<int,int>>> score_to_move;
+    std::map<int, Move> score_to_move;
 
-    for (auto m : board->get_valid_moves()) {
+    for (Move m : board->get_valid_moves()) {
         
         
         ChessBoard* next = board->makeMove(m);

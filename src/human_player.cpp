@@ -16,7 +16,7 @@ HumanPlayer::~HumanPlayer() {
 
 }
 
-std::tuple<ChessBoard::MoveType, std::string, std::string> HumanPlayer::get_move(ChessBoard* board) {
+Move HumanPlayer::get_move(ChessBoard* board) {
 
 	while (1) {
 		std::cout << name << "@ChessGame> ";
@@ -42,11 +42,11 @@ std::tuple<ChessBoard::MoveType, std::string, std::string> HumanPlayer::get_move
                 std::cout << "Improper Coordinates Specified" << std:: endl;
                 continue;
             }
-			return std::make_tuple(ChessBoard::MOVE, tokens[1], tokens[2]);
+			return Move(Move::MOVE, tokens[1], tokens[2]);
 		}
 
 		else if (command.compare("CASTLE") == 0) {
-			return std::make_tuple(ChessBoard::CASTLE, tokens[1], tokens[2]);
+			return Move(Move::CASTLE, tokens[1], tokens[2]);
 		}
 
 		else if (command.compare("MOVES") == 0) {
