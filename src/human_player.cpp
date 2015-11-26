@@ -84,6 +84,8 @@ Move HumanPlayer::get_move(ChessBoard* board) {
 			std::cout << "MOVE <coord1> <coord2> - prints a list of available moves" << std::endl;
 			std::cout << "                         Ex: MOVE 4a 4b" << std::endl;
 			std::cout << "PRINT - print board state" << std::endl;
+            std::cout << "PROMOTE <coord1> <coord2> <piece> - Promote a pawn" << std::endl;
+            std::cout << "                - Piece is one of [Q,R,B,N]" << std::endl;
 			std::cout << "EXIT - Exit game" << std::endl;
 		}
 

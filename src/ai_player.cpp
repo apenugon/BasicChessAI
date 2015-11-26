@@ -29,8 +29,10 @@ Move AIPlayer::get_move(ChessBoard* board) {
     auto from = move.get_from();
     auto to = move.get_to();
 
+#ifdef DEBUG
     std::cout << "from: " << std::get<0>(from) << "," << std::get<1>(from);
     std::cout << " to: " << std::get<0>(to) << "," << std::get<1>(to) << std::endl;
+#endif
 
     char colNumToChar[8] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
     std::stringstream ss;
