@@ -554,8 +554,10 @@ int ChessBoard::winner() {
 }
 
 bool ChessBoard::is_game_over() {
-    // The game is only over when a team has no moves left to make.
-	return valid_moves.size() == 0;
+    // The game is only over when a team has no moves left to make, 
+    // or there are only kings left.
+	return valid_moves.size() == 0 ||
+        (PieceListWhite.size() == 1 && PieceListBlack.size() == 1);
 }
 
 void ChessBoard::check_integrity() {

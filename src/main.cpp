@@ -8,18 +8,16 @@
 
 using namespace std;
 
-int fib(int n);
-
 int main(int argc, char* args[]) {
     bool is_player1_human = true;
     bool is_player2_human = true;
-    std::cout << argc << std::endl;
     if (argc == 3) {
         is_player1_human = args[1][0] == 'h';
         is_player2_human = args[2][0] == 'h';
     }
     omp_set_num_threads(omp_get_max_threads());
 	GameHandler* myGameHandler;;
+    std::cout << "Welcome to this game of chess! Please type 'HELP' at the prompt (after inputting your name) to learn about your possible inputs" << std::endl;
 	while(1) {
 		myGameHandler = new GameHandler(is_player1_human, is_player2_human);
 		int winner = myGameHandler->play_game();
