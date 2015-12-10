@@ -4,3 +4,4 @@ profile/*
 gmon.out
 valgrind.log
 *.*~
+.ycm_extra_conf.py
